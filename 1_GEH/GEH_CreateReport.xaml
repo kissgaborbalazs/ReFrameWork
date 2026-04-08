@@ -1,0 +1,494 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="GEH_CreateReport" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:meaw="clr-namespace:MPRT.Excel.Activities.Write;assembly=MPRT.Excel.Core" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:sc="clr-namespace:System.Collections;assembly=System.Private.CoreLib" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data.Common" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_ExceptionReportPath" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_Exception" Type="InArgument(s:Exception)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_CurrentTransaction" Type="InArgument(ui:QueueItem)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_NowTimestamp" Type="InArgument(x:String)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+  </x:Members>
+  <this:GEH_CreateReport.in_ExceptionReportPath>
+    <InArgument x:TypeArguments="x:String" />
+  </this:GEH_CreateReport.in_ExceptionReportPath>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap:VirtualizedContainerService.HintSize>1633,2975</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="72">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>UiPath.Platform.ResourceHandling</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Globalization</x:String>
+      <x:String>System.Runtime.CompilerServices</x:String>
+      <x:String>MPRT.Excel.Activities.Write</x:String>
+      <x:String>System.Numerics</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="140">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>Microsoft.PowerShell.Commands.Diagnostics</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>Microsoft.Win32.Primitives</AssemblyReference>
+      <AssemblyReference>MPRT.Custom.Activities</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>NPOI</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.SqlClient</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.DiagnosticSource</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.EventLog</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.FileVersionInfo</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.PerformanceCounter</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.Process</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.TextWriterTraceListener</AssemblyReference>
+      <AssemblyReference>System.Diagnostics.TraceSource</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.AccessControl</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.DriveInfo</AssemblyReference>
+      <AssemblyReference>System.IO.FileSystem.Watcher</AssemblyReference>
+      <AssemblyReference>System.IO.Packaging</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Private.Xml</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Runtime.CompilerServices.Unsafe</AssemblyReference>
+      <AssemblyReference>System.Runtime.CompilerServices.VisualC</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>GEH MPRT QUEUE CSharp.Core</AssemblyReference>
+      <AssemblyReference>MPRT.Excel.Core</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>Microsoft.Extensions.DependencyModel</AssemblyReference>
+      <AssemblyReference>System.Runtime.Numerics</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="GEH_CreateReport" sap:VirtualizedContainerService.HintSize="1227,2605" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Default="dddd, MMMM dd yyyy, h:mm:ss tt" Name="dateFormat" />
+      <Variable x:TypeArguments="x:Int32" Name="index" />
+      <Variable x:TypeArguments="sd:DataTable" Name="infoDT" />
+      <Variable x:TypeArguments="s:IFormatProvider" Name="provider">
+        <Variable.Default>
+          <CSharpValue x:TypeArguments="s:IFormatProvider" sap2010:WorkflowViewState.IdRef="CSharpValue`1_3">System.Globalization.DateTimeFormatInfo.InvariantInfo</CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:List(x:String)" Name="exceptionInfo" />
+      <Variable x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))" Name="exceptionDetails" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message - report creation start" sap:VirtualizedContainerService.HintSize="570,173" sap2010:WorkflowViewState.IdRef="LogMessage_1">
+      <ui:LogMessage.Message>
+        <InArgument x:TypeArguments="x:Object">
+          <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_1">"Starting to create the exception report in Excel"</CSharpValue>
+        </InArgument>
+      </ui:LogMessage.Message>
+    </ui:LogMessage>
+    <ui:CopyFile ContinueOnError="{x:Null}" DestinationResource="{x:Null}" PathResource="{x:Null}" DisplayName="Create copy of report template file" sap:VirtualizedContainerService.HintSize="570,250" sap2010:WorkflowViewState.IdRef="CopyFile_3" Overwrite="True" Path="Templates\GEH_ReportTemplate.xlsx">
+      <ui:CopyFile.Destination>
+        <InArgument x:TypeArguments="x:String">
+          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_4">in_ExceptionReportPath</CSharpValue>
+        </InArgument>
+      </ui:CopyFile.Destination>
+    </ui:CopyFile>
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="570,57" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="400,276" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="// Helper method for extracting workflow file path&#xA;Func&lt;object, string&gt; GetWorkflowFilePath = (faultedDetailsObject) =&gt;&#xA;{&#xA;&#x9;var workflowFileProperty = faultedDetailsObject.GetType().GetProperty(&quot;WorkflowFile&quot;);&#xA;    if (workflowFileProperty == null) return &quot;N/A&quot;;&#xA;    &#xA;    var workflowFilePath = workflowFileProperty.GetValue(faultedDetailsObject)?.ToString();&#xA;    return workflowFilePath?.Replace(Environment.CurrentDirectory + &quot;\\&quot;, &quot;&quot;) ?? &quot;N/A&quot;;&#xA;};&#xA;&#xA;// Create a list with all exception details&#xA;exceptionDetails = new List&lt;string&gt;();&#xA;&#xA;exceptionDetails.Add(exception.Data[&quot;Name&quot;]?.ToString() ?? &quot;N/A&quot;);&#xA;exceptionDetails.Add(exception.Data[&quot;Name&quot;]?.ToString() ?? &quot;N/A&quot;);&#xA;exceptionDetails.Add(exception.Data[&quot;Id&quot;]?.ToString() ?? &quot;N/A&quot;);&#xA;exceptionDetails.Add(exception.Data[&quot;TypeName&quot;]?.ToString() ?? &quot;N/A&quot;);&#xA;exceptionDetails.Add(exception.ToString());&#xA;exceptionDetails.Add(Environment.MachineName);&#xA;exceptionDetails.Add(Process.GetCurrentProcess().StartTime.ToString(dateFormat));&#xA;exceptionDetails.Add(DateTime.ParseExact(nowTimestamp, &quot;_MMddyy_HHmmss&quot;, provider).ToString(dateFormat));&#xA;exceptionDetails.Add(Environment.UserName);&#xA;&#xA;string faultedDetails = exception.Data.Contains(&quot;FaultedDetails&quot;) &#xA;&#x9;? GetWorkflowFilePath(exception.Data[&quot;FaultedDetails&quot;]) &#xA;    : &quot;N/A&quot;;&#xA;exceptionDetails.Add(faultedDetails);" DisplayName="Get exception info" sap:VirtualizedContainerService.HintSize="338,165" sap2010:WorkflowViewState.IdRef="InvokeCode_1" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <OutArgument x:TypeArguments="scg:List(x:String)" x:Key="exceptionDetails">
+                <CSharpReference x:TypeArguments="scg:List(x:String)" sap2010:WorkflowViewState.IdRef="CSharpReference`1_1">exceptionInfo</CSharpReference>
+              </OutArgument>
+              <InArgument x:TypeArguments="s:Exception" x:Key="exception">
+                <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_6">in_Exception</CSharpValue>
+              </InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="nowTimestamp">
+                <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_5">in_NowTimestamp</CSharpValue>
+              </InArgument>
+              <InArgument x:TypeArguments="x:String" x:Key="dateFormat">
+                <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_7">dateFormat</CSharpValue>
+              </InArgument>
+              <InArgument x:TypeArguments="s:IFormatProvider" x:Key="provider">
+                <CSharpValue x:TypeArguments="s:IFormatProvider" sap2010:WorkflowViewState.IdRef="CSharpValue`1_8">provider</CSharpValue>
+              </InArgument>
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+        </Sequence>
+      </ui:CommentOut.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CommentOut>
+    <Assign DisplayName="get exceptionInfo" sap:VirtualizedContainerService.HintSize="570,115" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(x:String)">
+          <CSharpReference x:TypeArguments="scg:List(x:String)" sap2010:WorkflowViewState.IdRef="CSharpReference`1_4">exceptionInfo</CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(x:String)">
+          <CSharpValue x:TypeArguments="scg:List(x:String)" sap2010:WorkflowViewState.IdRef="CSharpValue`1_26" xml:space="preserve">new[]
+ {
+ 	in_Exception.Data["Name"].ToString() ?? "N/A",
+    in_Exception.Data["Id"].ToString() ?? "N/A",
+    in_Exception.Data["TypeName"].ToString() ?? "N/A",
+    in_Exception.ToString(),
+    Environment.MachineName,
+    Process.GetCurrentProcess().StartTime.ToString(dateFormat),
+    DateTime.ParseExact(in_NowTimestamp, "_yyMMdd_HHmmss", provider).ToString(dateFormat),
+    Environment.UserName,
+    in_Exception.Data.Contains("FaultedDetails") &amp;&amp; in_Exception.Data["FaultedDetails"].GetType().GetProperty("WorkflowFile") != null
+    	? in_Exception.Data["FaultedDetails"].GetType().GetProperty("WorkflowFile").GetValue(in_Exception.Data["FaultedDetails"]).ToString()
+        	.Replace(Environment.CurrentDirectory + "\\", "") ?? "N/A"
+        : "N/A"
+}.ToList()</CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ForEach x:TypeArguments="x:Object" DisplayName="For Each item in exceptionDetails" sap:VirtualizedContainerService.HintSize="570,328" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+          </ActivityAction.Argument>
+          <meaw:WriteCell DisplayName="Write to Exception Info sheet" sap:VirtualizedContainerService.HintSize="334,133" sap2010:WorkflowViewState.IdRef="WriteCell_2" SheetName="ExceptionInfo">
+            <meaw:WriteCell.CellAddress>
+              <InArgument x:TypeArguments="x:String">
+                <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_28">"B" + Convert.ToString(index+2)</CSharpValue>
+              </InArgument>
+            </meaw:WriteCell.CellAddress>
+            <meaw:WriteCell.FilePath>
+              <InArgument x:TypeArguments="x:String">
+                <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_27">in_ExceptionReportPath</CSharpValue>
+              </InArgument>
+            </meaw:WriteCell.FilePath>
+            <meaw:WriteCell.Value>
+              <InArgument x:TypeArguments="x:Object">
+                <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_29">(string)item</CSharpValue>
+              </InArgument>
+            </meaw:WriteCell.Value>
+          </meaw:WriteCell>
+        </ActivityAction>
+      </ui:ForEach.Body>
+      <ui:ForEach.CurrentIndex>
+        <OutArgument x:TypeArguments="x:Int32">
+          <CSharpReference x:TypeArguments="x:Int32" sap2010:WorkflowViewState.IdRef="CSharpReference`1_2">index</CSharpReference>
+        </OutArgument>
+      </ui:ForEach.CurrentIndex>
+      <ui:ForEach.Values>
+        <InArgument x:TypeArguments="sc:IEnumerable">
+          <CSharpValue x:TypeArguments="sc:IEnumerable" sap2010:WorkflowViewState.IdRef="CSharpValue`1_9">exceptionInfo</CSharpValue>
+        </InArgument>
+      </ui:ForEach.Values>
+    </ui:ForEach>
+    <Assign DisplayName="get exceptionDetails" sap:VirtualizedContainerService.HintSize="570,115" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))">
+          <CSharpReference x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))" sap2010:WorkflowViewState.IdRef="CSharpReference`1_3">exceptionDetails</CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))">
+          <CSharpValue x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))" sap2010:WorkflowViewState.IdRef="CSharpValue`1_15" xml:space="preserve">new[]{
+            new Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;("ActivityArguments",
+                Newtonsoft.Json.JsonConvert.DeserializeObject&lt;IDictionary&lt;string, object&gt;&gt;(in_Exception.Data["Arguments"].ToString())),
+                
+            new Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;("TransactionInfo",
+                in_CurrentTransaction == null ? 
+                new Dictionary&lt;string, object&gt; { { "Note", "This error occurred outside the Process flow, and is not associated with a transaction" } } :
+                in_CurrentTransaction.GetType().GetProperties()
+                    .ToDictionary(x =&gt; x.Name, x =&gt; x.GetValue(in_CurrentTransaction))),
+
+            new Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;("Variables",
+                Newtonsoft.Json.JsonConvert.DeserializeObject&lt;IDictionary&lt;string, object&gt;&gt;(in_Exception.Data["Variables"].ToString())),
+                
+            new Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;("WorkflowArguments",
+                Newtonsoft.Json.JsonConvert.DeserializeObject&lt;IDictionary&lt;string, object&gt;&gt;(in_Exception.Data["WorkflowArguments"].ToString()))
+}.ToList();</CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="570,57" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+      <ui:CommentOut.Body>
+        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="400,276" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeCode ContinueOnError="{x:Null}" Code="&#xA;// Helper function to create a Tuple&#xA;Func&lt;string, IDictionary&lt;string, object&gt;, Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;&gt; CreateTuple = (name, data) =&gt;&#xA;{&#xA;    return new Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;(name, data);&#xA;};&#xA;&#xA;// Helper function to deserialize JSON data to IDictionary&#xA;Func&lt;string, IDictionary&lt;string, object&gt;&gt; DeserializeJsonToDictionary = (json) =&gt;&#xA;{&#xA;    return Newtonsoft.Json.JsonConvert.DeserializeObject&lt;IDictionary&lt;string, object&gt;&gt;(json);&#xA;};&#xA;&#xA;// Function to get transaction info&#xA;Func&lt;UiPath.Core.QueueItem, IDictionary&lt;string, object&gt;&gt; GetTransactionInfo = (transaction) =&gt; &#xA;{&#xA;    if (transaction == null)&#xA;    {&#xA;        return new Dictionary&lt;string, object&gt;&#xA;        {&#xA;            { &quot;Note&quot;, &quot;This error occurred outside the Process flow, and is not associated with a transaction&quot; }&#xA;        };&#xA;    }&#xA;    else&#xA;    {&#xA;        return transaction.GetType().GetProperties()&#xA;            .ToDictionary(x =&gt; x.Name, x =&gt; x.GetValue(transaction));&#xA;    }&#xA;};&#xA;&#xA;// Create a list of tuples to hold activity details&#xA;Func&lt;Exception, QueueItem, List&lt;Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;&gt;&gt; GetActivityDetails = (ex, transaction) =&gt;&#xA;{&#xA;    List&lt;Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;&gt; activityDetails = new List&lt;Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;&gt;&#xA;    {&#xA;        CreateTuple(&quot;ActivityArguments&quot;, DeserializeJsonToDictionary(ex.Data[&quot;Arguments&quot;].ToString())),&#xA;        CreateTuple(&quot;TransactionInfo&quot;, GetTransactionInfo(transaction)),&#xA;        CreateTuple(&quot;Variables&quot;, DeserializeJsonToDictionary(ex.Data[&quot;Variables&quot;].ToString())),&#xA;        CreateTuple(&quot;WorkflowArguments&quot;, DeserializeJsonToDictionary(ex.Data[&quot;WorkflowArguments&quot;].ToString()))&#xA;    };&#xA;    return activityDetails;&#xA;};&#xA;&#xA;exceptionDetails = GetActivityDetails(exception, currentTransaction);" DisplayName="Get exception details" sap:VirtualizedContainerService.HintSize="338,165" sap2010:WorkflowViewState.IdRef="InvokeCode_2" Language="CSharp">
+            <ui:InvokeCode.Arguments>
+              <InArgument x:TypeArguments="s:Exception" x:Key="exception">
+                <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_14">in_Exception</CSharpValue>
+              </InArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="currentTransaction">
+                <CSharpValue x:TypeArguments="ui:QueueItem" sap2010:WorkflowViewState.IdRef="CSharpValue`1_13">in_CurrentTransaction</CSharpValue>
+              </InArgument>
+              <InArgument x:TypeArguments="scg:List(s:Tuple(x:String, scg:IDictionary(x:String, x:Object)))" x:Key="exceptionDetails" />
+            </ui:InvokeCode.Arguments>
+          </ui:InvokeCode>
+        </Sequence>
+      </ui:CommentOut.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CommentOut>
+    <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each (SheetName, Dictionary) Pair" sap:VirtualizedContainerService.HintSize="570,1323" sap2010:WorkflowViewState.IdRef="ForEach`1_2">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="exceptionDetail" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Record dictionary information in the Excel sheet" sap:VirtualizedContainerService.HintSize="536,1150" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="s:Tuple(x:String, scg:IDictionary(x:String, x:Object))" Name="pair" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Assign DisplayName="set pair" sap:VirtualizedContainerService.HintSize="502,114" sap2010:WorkflowViewState.IdRef="Assign_3">
+              <Assign.To>
+                <OutArgument x:TypeArguments="s:Tuple(x:String, scg:IDictionary(x:String, x:Object))">
+                  <CSharpReference x:TypeArguments="s:Tuple(x:String, scg:IDictionary(x:String, x:Object))" sap2010:WorkflowViewState.IdRef="CSharpReference`1_5">pair</CSharpReference>
+                </OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="s:Tuple(x:String, scg:IDictionary(x:String, x:Object))">
+                  <CSharpValue x:TypeArguments="s:Tuple(x:String, scg:IDictionary(x:String, x:Object))" sap2010:WorkflowViewState.IdRef="CSharpValue`1_18">(Tuple&lt;string, IDictionary&lt;string, object&gt;&gt;)exceptionDetail</CSharpValue>
+                </InArgument>
+              </Assign.Value>
+            </Assign>
+            <ui:BuildDataTable DisplayName="Build Data Table" sap:VirtualizedContainerService.HintSize="502,92" sap2010:WorkflowViewState.IdRef="BuildDataTable_2" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Name&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Value&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;">
+              <ui:BuildDataTable.DataTable>
+                <OutArgument x:TypeArguments="sd:DataTable">
+                  <CSharpReference x:TypeArguments="sd:DataTable" sap2010:WorkflowViewState.IdRef="CSharpReference`1_9">infoDT</CSharpReference>
+                </OutArgument>
+              </ui:BuildDataTable.DataTable>
+            </ui:BuildDataTable>
+            <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="502,57" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+              <ui:CommentOut.Body>
+                <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="400,202" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:BuildDataTable sap2010:Annotation.AnnotationText="Create a blank data table with columns Name, Value" DataTable="[InfoDT]" DisplayName="Create DT for keys and values" sap:VirtualizedContainerService.HintSize="338,91" sap2010:WorkflowViewState.IdRef="BuildDataTable_1" TableInfo="&lt;NewDataSet&gt;&#xA;  &lt;xs:schema id=&quot;NewDataSet&quot; xmlns=&quot;&quot; xmlns:xs=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:msdata=&quot;urn:schemas-microsoft-com:xml-msdata&quot;&gt;&#xA;    &lt;xs:element name=&quot;NewDataSet&quot; msdata:IsDataSet=&quot;true&quot; msdata:MainDataTable=&quot;TableName&quot; msdata:UseCurrentLocale=&quot;true&quot;&gt;&#xA;      &lt;xs:complexType&gt;&#xA;        &lt;xs:choice minOccurs=&quot;0&quot; maxOccurs=&quot;unbounded&quot;&gt;&#xA;          &lt;xs:element name=&quot;TableName&quot;&gt;&#xA;            &lt;xs:complexType&gt;&#xA;              &lt;xs:sequence&gt;&#xA;                &lt;xs:element name=&quot;Name&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; /&gt;&#xA;                &lt;xs:element name=&quot;Value&quot; msdata:Caption=&quot;&quot; type=&quot;xs:string&quot; minOccurs=&quot;0&quot; /&gt;&#xA;              &lt;/xs:sequence&gt;&#xA;            &lt;/xs:complexType&gt;&#xA;          &lt;/xs:element&gt;&#xA;        &lt;/xs:choice&gt;&#xA;      &lt;/xs:complexType&gt;&#xA;      &lt;xs:unique name=&quot;Constraint1&quot;&gt;&#xA;        &lt;xs:selector xpath=&quot;.//TableName&quot; /&gt;&#xA;        &lt;xs:field xpath=&quot;Name&quot; /&gt;&#xA;      &lt;/xs:unique&gt;&#xA;    &lt;/xs:element&gt;&#xA;  &lt;/xs:schema&gt;&#xA;&lt;/NewDataSet&gt;">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:BuildDataTable>
+                </Sequence>
+              </ui:CommentOut.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:CommentOut>
+            <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each item" sap:VirtualizedContainerService.HintSize="502,671" sap2010:WorkflowViewState.IdRef="ForEach`1_3">
+              <ui:ForEach.Body>
+                <ActivityAction x:TypeArguments="x:Object">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Add row to the data table" sap:VirtualizedContainerService.HintSize="468,498" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="x:String" Name="key" />
+                      <Variable x:TypeArguments="s:String[]" Name="arrayRow" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="set key" sap:VirtualizedContainerService.HintSize="434,114" sap2010:WorkflowViewState.IdRef="Assign_4">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">
+                          <CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_6">key</CSharpReference>
+                        </OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">
+                          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_20">(string)item</CSharpValue>
+                        </InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Assign DisplayName="set arrayRow" sap:VirtualizedContainerService.HintSize="434,115" sap2010:WorkflowViewState.IdRef="Assign_5">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="s:String[]">
+                          <CSharpReference x:TypeArguments="s:String[]" sap2010:WorkflowViewState.IdRef="CSharpReference`1_7">arrayRow</CSharpReference>
+                        </OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="s:String[]">
+                          <CSharpValue x:TypeArguments="s:String[]" sap2010:WorkflowViewState.IdRef="CSharpValue`1_21" xml:space="preserve">new[]
+{key, pair.Item2[key] == null 
+	? "null" 
+	: pair.Item2[key].ToString().Length &gt; 32000 
+    	? pair.Item2[key].ToString().Substring(0, 32000) 
+        : pair.Item2[key].ToString()
+}</CSharpValue>
+                        </InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:AddDataRow DataRow="{x:Null}" DisplayName="Add the key and value to the data table" sap:VirtualizedContainerService.HintSize="434,209" sap2010:WorkflowViewState.IdRef="AddDataRow_1">
+                      <ui:AddDataRow.ArrayRow>
+                        <InArgument x:TypeArguments="s:Object[]">
+                          <CSharpValue x:TypeArguments="s:Object[]" sap2010:WorkflowViewState.IdRef="CSharpValue`1_22">arrayRow</CSharpValue>
+                        </InArgument>
+                      </ui:AddDataRow.ArrayRow>
+                      <ui:AddDataRow.DataTable>
+                        <InOutArgument x:TypeArguments="sd:DataTable">
+                          <CSharpReference x:TypeArguments="sd:DataTable" sap2010:WorkflowViewState.IdRef="CSharpReference`1_8">infoDT</CSharpReference>
+                        </InOutArgument>
+                      </ui:AddDataRow.DataTable>
+                    </ui:AddDataRow>
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEach.Body>
+              <ui:ForEach.Values>
+                <InArgument x:TypeArguments="sc:IEnumerable">
+                  <CSharpValue x:TypeArguments="sc:IEnumerable" sap2010:WorkflowViewState.IdRef="CSharpValue`1_19">pair.Item2.Keys</CSharpValue>
+                </InArgument>
+              </ui:ForEach.Values>
+            </ui:ForEach>
+            <meaw:AppendDataTable DisplayName="Add the datatable of keys/values to the sheet" sap:VirtualizedContainerService.HintSize="502,156" sap2010:WorkflowViewState.IdRef="AppendDataTable_1">
+              <meaw:AppendDataTable.DataTable>
+                <InArgument x:TypeArguments="sd:DataTable">
+                  <CSharpValue x:TypeArguments="sd:DataTable" sap2010:WorkflowViewState.IdRef="CSharpValue`1_32">infoDT</CSharpValue>
+                </InArgument>
+              </meaw:AppendDataTable.DataTable>
+              <meaw:AppendDataTable.FilePath>
+                <InArgument x:TypeArguments="x:String">
+                  <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_30">in_ExceptionReportPath</CSharpValue>
+                </InArgument>
+              </meaw:AppendDataTable.FilePath>
+              <meaw:AppendDataTable.SheetName>
+                <InArgument x:TypeArguments="x:String">
+                  <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_31">pair.Item1</CSharpValue>
+                </InArgument>
+              </meaw:AppendDataTable.SheetName>
+            </meaw:AppendDataTable>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEach.Body>
+      <ui:ForEach.Values>
+        <InArgument x:TypeArguments="sc:IEnumerable">
+          <CSharpValue x:TypeArguments="sc:IEnumerable" sap2010:WorkflowViewState.IdRef="CSharpValue`1_16">exceptionDetails</CSharpValue>
+        </InArgument>
+      </ui:ForEach.Values>
+    </ui:ForEach>
+    <ui:LogMessage DisplayName="Log Message - report creation end" sap:VirtualizedContainerService.HintSize="570,164" sap2010:WorkflowViewState.IdRef="LogMessage_2">
+      <ui:LogMessage.Message>
+        <InArgument x:TypeArguments="x:Object">
+          <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_2">"Finished creating the exception report in Excel"</CSharpValue>
+        </InArgument>
+      </ui:LogMessage.Message>
+    </ui:LogMessage>
+  </Sequence>
+</Activity>

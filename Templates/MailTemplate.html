@@ -1,0 +1,43 @@
+<html>
+<head>
+  <style>
+    body { font-family: Segoe UI, sans-serif; color: #333; font-size: 14px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .status-success { color: green; font-weight: bold; }
+    .footer { margin-top: 20px; font-size: 12px; color: #888; }
+  </style>
+</head>
+<body>
+  <p>Tisztelt Ügyintéző!</p>
+
+  <p>A következő UiPath automatizáció <strong>lefutott</strong>:</p>
+
+  <table>
+    <tr><th style="width: 30%;">Folyamat neve</th><td><strong>{automationName}</strong></td></tr>
+	<tr><th>Tranzakció azonosító</th><td>{reference}</td></tr>
+    <tr><th>Futás eredménye</th>
+      <td>
+        <span class="status-success">{result}</span>
+      </td>
+    </tr>
+    <tr><th>Környezet</th><td>{environment}</td></tr>
+	<tr><th>Felhasználó</th><td>{userName}</td></tr>
+    <tr><th>Futás ideje</th><td>{timestamp}</td></tr>
+  </table>
+
+  <!--
+  <h3>Feldolgozási eredmények</h3> Ide jöhet feldolgozási üzenet, ha igényli a folyamat!!!
+  <table>
+    <tr><th style="width: 30%;">Sikeres</th><td>{count1}</td></tr>
+    <tr><th>Sikeretelen</th><td>{count2}</td></tr>
+  </table>
+  -->
+
+  <div class="footer">
+    <p>Ez egy automatikusan generált üzenet, kérjük ne válaszoljon rá.<br>
+    Üdvözlettel: {robotName}</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="BuildErrorDictionary" this:BuildErrorDictionary.in_RobotName="N/A" this:BuildErrorDictionary.in_AutomationName="N/A" this:BuildErrorDictionary.in_TransactionIdentifier="N/A" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_ResultDictionary" Type="OutArgument(scg:Dictionary(x:String, x:String))" />
+    <x:Property Name="in_Exception" Type="InArgument(s:Exception)">
+      <x:Property.Attributes>
+        <RequiredArgumentAttribute />
+      </x:Property.Attributes>
+    </x:Property>
+    <x:Property Name="in_RobotName" Type="InArgument(x:String)" />
+    <x:Property Name="in_ExceptionType" Type="InArgument(x:String)" />
+    <x:Property Name="in_AutomationName" Type="InArgument(x:String)" />
+    <x:Property Name="in_TransactionIdentifier" Type="InArgument(x:String)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory.Data</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="BuildErrorDictionary" sap:VirtualizedContainerService.HintSize="1867,614" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:CurrentJobInfo" Name="jobData" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:GetCurrentJobInfo DisplayName="Get Current Job Info" sap:VirtualizedContainerService.HintSize="416,57" sap2010:WorkflowViewState.IdRef="GetCurrentJobInfo_1">
+      <ui:GetCurrentJobInfo.Result>
+        <OutArgument x:TypeArguments="ui:CurrentJobInfo">
+          <CSharpReference x:TypeArguments="ui:CurrentJobInfo" sap2010:WorkflowViewState.IdRef="CSharpReference`1_1">jobData</CSharpReference>
+        </OutArgument>
+      </ui:GetCurrentJobInfo.Result>
+    </ui:GetCurrentJobInfo>
+    <ui:LogMessage DisplayName="Log Message - start" sap:VirtualizedContainerService.HintSize="416,173" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info">
+      <ui:LogMessage.Message>
+        <InArgument x:TypeArguments="x:Object">
+          <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_3">$"{jobData.WorkflowName} has started..."</CSharpValue>
+        </InArgument>
+      </ui:LogMessage.Message>
+    </ui:LogMessage>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="if(string.IsNullOrWhiteSpace(robotName))&#xD;&#xA;                robotName = &quot;N/A&quot;;&#xD;&#xA;            if(string.IsNullOrWhiteSpace(transactionIdentifier))&#xD;&#xA;                transactionIdentifier = &quot;N/A&quot;;&#xD;&#xA;            if(string.IsNullOrWhiteSpace(automationName))&#xD;&#xA;                automationName = &quot;N/A&quot;;&#xD;&#xA;&#xD;&#xA;            // Biztonságos adatkinyerés null-ellenőrzésekkel&#xD;&#xA;            var exceptionData = exception?.Data;&#xD;&#xA;            var faultedDetails = exceptionData?.Contains(&quot;FaultedDetails&quot;) == true&#xD;&#xA;                ? exceptionData[&quot;FaultedDetails&quot;]&#xD;&#xA;                : null;&#xD;&#xA;&#xD;&#xA;            var workflowFile = faultedDetails?.GetType().GetProperty(&quot;WorkflowFile&quot;)?.GetValue(faultedDetails)?.ToString();&#xD;&#xA;&#xD;&#xA;            // A Dictionary összeállítása&#xD;&#xA;            resultDictionary = new Dictionary&lt;string, string&gt;()&#xD;&#xA;            {&#xD;&#xA;                {&quot;{automationName}&quot;, automationName ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{result}&quot;, exceptionType + &quot; exception&quot; ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{reference}&quot;, transactionIdentifier ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{userName}&quot;, Environment.UserName ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{environment}&quot;, Environment.UserDomainName ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{timestamp}&quot;, DateTime.Now.ToString(&quot;yyyy-MM-dd HH:mm:ss&quot;)},&#xD;&#xA;                {&quot;{exceptionType}&quot;, exception?.GetType().Name ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{exceptionMessage}&quot;, exception?.Message ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{activityName}&quot;, exceptionData?.Contains(&quot;Name&quot;) == true ? exceptionData[&quot;Name&quot;]?.ToString() ?? &quot;N/A&quot; : &quot;N/A&quot;},&#xD;&#xA;                {&quot;{activityType}&quot;, exceptionData?.Contains(&quot;TypeName&quot;) == true ? exceptionData[&quot;TypeName&quot;]?.ToString() ?? &quot;N/A&quot; : &quot;N/A&quot;},&#xD;&#xA;                {&quot;{stackTrace}&quot;, exceptionType == &quot;Business&quot; ? &quot;N/A&quot; : exception?.StackTrace ?? &quot;N/A&quot;},&#xD;&#xA;                {&quot;{robotName}&quot;, robotName},&#xD;&#xA;                {&quot;{xamlName}&quot;, workflowFile?.Replace(Environment.CurrentDirectory + &quot;\\&quot;, &quot;&quot;) ?? &quot;N/A&quot;}&#xD;&#xA;            };" DisplayName="Build dictionary" sap:VirtualizedContainerService.HintSize="416,197" sap2010:WorkflowViewState.IdRef="InvokeCode_1" Language="CSharp">
+      <ui:InvokeCode.Arguments>
+        <InArgument x:TypeArguments="x:String" x:Key="robotName">
+          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_14">in_RobotName</CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="s:Exception" x:Key="exception">
+          <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_13">in_Exception</CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="transactionIdentifier">
+          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_12">in_TransactionIdentifier</CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="exceptionType">
+          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_11">in_ExceptionType</CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="automationName">
+          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_10">in_AutomationName</CSharpValue>
+        </InArgument>
+        <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="resultDictionary">
+          <CSharpReference x:TypeArguments="scg:Dictionary(x:String, x:String)" sap2010:WorkflowViewState.IdRef="CSharpReference`1_6">out_ResultDictionary</CSharpReference>
+        </OutArgument>
+      </ui:InvokeCode.Arguments>
+    </ui:InvokeCode>
+    <ui:LogMessage DisplayName="Log Message - end" sap:VirtualizedContainerService.HintSize="416,164" sap2010:WorkflowViewState.IdRef="LogMessage_2">
+      <ui:LogMessage.Message>
+        <InArgument x:TypeArguments="x:Object">
+          <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_4">$"{jobData.WorkflowName} has ended..."</CSharpValue>
+        </InArgument>
+      </ui:LogMessage.Message>
+    </ui:LogMessage>
+  </Sequence>
+</Activity>
