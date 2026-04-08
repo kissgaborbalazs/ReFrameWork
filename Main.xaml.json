@@ -1,0 +1,57 @@
+{
+  "DisplayName": "Main",
+  "Tooltip": null,
+  "HelpLink": null,
+  "Color": null,
+  "OriginalIconFileName": null,
+  "Arguments": [
+    {
+      "Name": "in_NonWorkingHours",
+      "DisplayName": "in_NonWorkingHours",
+      "Category": null,
+      "Tooltip": "Azoknak az időszakoknak a felsorolása melyek közözz az adott folyamat nem futhat. (pl: 14:00-14:30,16:00-17:15)",
+      "Placeholder": null,
+      "Widget": null,
+      "IsRequired": false,
+      "IsPrincipal": true,
+      "ArgumentType": 0,
+      "DataSourceItems": null
+    },
+    {
+      "Name": "in_ConfigFilePath",
+      "DisplayName": "in_ConfigFilePath",
+      "Category": null,
+      "Tooltip": "A folyamat által használt config fájl elérési útvonala. Alapértelmezett érték \"Configuration\\Config.xlsx\"",
+      "Placeholder": "Configuration\\Config.xlsx",
+      "Widget": null,
+      "IsRequired": false,
+      "IsPrincipal": true,
+      "ArgumentType": 0,
+      "DataSourceItems": null
+    },
+    {
+      "Name": "in_Limit",
+      "DisplayName": "in_Limit",
+      "Category": null,
+      "Tooltip": "Az egyes Jobok által feldolgozható Queue elemek maximális száma. 1 nél kisebb érték esetén 1 kerül beállításra",
+      "Placeholder": null,
+      "Widget": null,
+      "IsRequired": false,
+      "IsPrincipal": true,
+      "ArgumentType": 0,
+      "DataSourceItems": null
+    },
+    {
+      "Name": "in_StopAtLimit",
+      "DisplayName": "in_StopAtLimit",
+      "Category": null,
+      "Tooltip": "Feldolgozás leállítása a Limit argumentumban beállított elem feldolgozása után. Alapértelmazett érék \"True\"",
+      "Placeholder": "True",
+      "Widget": null,
+      "IsRequired": false,
+      "IsPrincipal": true,
+      "ArgumentType": 0,
+      "DataSourceItems": null
+    }
+  ]
+}

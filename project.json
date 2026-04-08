@@ -1,0 +1,108 @@
+{
+  "name": "GEH MPRT QUEUE CSharp",
+  "projectId": "002d8c18-f932-4967-8aee-c648536ccdff",
+  "description": "Process tamplate with globl exception handler",
+  "main": "Main.xaml",
+  "dependencies": {
+    "MPRT.Activities": "[1.0.11]",
+    "MPRT.Excel": "[1.0.1]",
+    "UiPath.Mail.Activities": "[2.3.10]",
+    "UiPath.System.Activities": "[25.8.0]",
+    "UiPath.Testing.Activities": "[25.4.1]",
+    "UiPath.UIAutomation.Activities": "[25.10.13]"
+  },
+  "webServices": [],
+  "entitiesStores": [],
+  "schemaVersion": "4.0",
+  "studioVersion": "24.10.9.0",
+  "projectVersion": "2.0.6",
+  "runtimeOptions": {
+    "exceptionHandlerWorkflow": "1_GEH\\GEH_Main.xaml",
+    "autoDispose": false,
+    "netFrameworkLazyLoading": false,
+    "isPausable": true,
+    "isAttended": false,
+    "requiresUserInteraction": true,
+    "supportsPersistence": false,
+    "workflowSerialization": "DataContract",
+    "excludedLoggedData": [
+      "Private:*",
+      "*password*"
+    ],
+    "executionType": "Workflow",
+    "readyForPiP": false,
+    "startsInPiP": false,
+    "mustRestoreAllDependencies": true,
+    "pipType": "ChildSession"
+  },
+  "designOptions": {
+    "projectProfile": "Developement",
+    "outputType": "Process",
+    "libraryOptions": {
+      "includeOriginalXaml": false,
+      "privateWorkflows": []
+    },
+    "processOptions": {
+      "ignoredFiles": [
+        "1_GEH/BuildErrorDictionary.cs"
+      ]
+    },
+    "fileInfoCollection": [
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "1e59a999-2537-4359-a3cb-23a48860a440",
+        "testCaseType": "TestCase",
+        "executionTemplateInvokeIsolated": false,
+        "fileName": "5_Test\\Main\\Main_MainException.xaml"
+      },
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "4fa3ada7-9e5a-4160-a65b-0324a01602be",
+        "testCaseType": "TestCase",
+        "executionTemplateInvokeIsolated": false,
+        "fileName": "5_Test\\Main\\Main_SystemException.xaml"
+      },
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "6058d3a9-f1ae-4876-88ab-ac74a535b5dc",
+        "testCaseType": "TestCase",
+        "executionTemplateInvokeIsolated": false,
+        "fileName": "5_Test\\Main\\Main_BusinessException.xaml"
+      },
+      {
+        "editingStatus": "InProgress",
+        "testCaseId": "78dc0d5b-7987-4675-b318-a2c772167d0f",
+        "testCaseType": "TestCase",
+        "executionTemplateInvokeIsolated": false,
+        "fileName": "5_Test\\Main\\Main_Successfull.xaml"
+      },
+      {
+        "templateType": "Generic",
+        "fileName": ".templates\\MPRT_Workflowtemplate.xaml"
+      }
+    ],
+    "saveToCloud": false
+  },
+  "expressionLanguage": "CSharp",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "1216978c-0b26-4405-b3fe-9364a861f0aa",
+      "input": [],
+      "output": []
+    },
+    {
+      "filePath": "4_Reusable_Modules\\PreviewDataTable.cs",
+      "uniqueId": "fbae41c0-ca59-4e83-bc4e-8b6a0d827482",
+      "input": [],
+      "output": []
+    }
+  ],
+  "isTemplate": true,
+  "templateProjectData": {
+    "defaultProjectDescription": "Blank Process",
+    "defaultProjectName": "GEH MPRT QUEUE CSharp"
+  },
+  "publishData": {},
+  "targetFramework": "Windows"
+}
