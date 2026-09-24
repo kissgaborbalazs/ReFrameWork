@@ -169,7 +169,12 @@
                     <x:Boolean x:Key="IsAnnotationDocked">False</x:Boolean>
                   </scg:Dictionary>
                 </sap:WorkflowViewStateService.ViewState>
-                <ui:SetTransactionStatus ContinueOnError="{x:Null}" ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Set Transaction Status - Successful" ErrorType="Business" FolderPath="Processes/Teszt" sap:VirtualizedContainerService.HintSize="416,723" sap2010:WorkflowViewState.IdRef="SetTransactionStatus_1" Status="Successful">
+                <ui:SetTransactionStatus ContinueOnError="{x:Null}" ServiceBaseAddress="{x:Null}" TimeoutMS="{x:Null}" DisplayName="Set Transaction Status - Successful" ErrorType="Business" sap:VirtualizedContainerService.HintSize="416,723" sap2010:WorkflowViewState.IdRef="SetTransactionStatus_1" Status="Successful">
+                  <ui:SetTransactionStatus.FolderPath>
+                    <InArgument x:TypeArguments="x:String">
+                      <CSharpValue x:TypeArguments="x:String">GlobalVariables.Config["OrchestratorQueueFolder"].ToString()</CSharpValue>
+                    </InArgument>
+                  </ui:SetTransactionStatus.FolderPath>
                   <ui:SetTransactionStatus.Analytics>
                     <InArgument x:TypeArguments="x:String" x:Key="Inicializálási idő">
                       <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_24">in_AnalyticsData["Initilaizing time"].ToString()</CSharpValue>

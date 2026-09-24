@@ -52,7 +52,7 @@
 
 ---
 
-### 7. `0_Framework/SetTransactionStatus.xaml` – Hardkódolt Orchestrator mappa
+### 7. ✅ `0_Framework/SetTransactionStatus.xaml` – Hardkódolt Orchestrator mappa (javítva, lásd „Hibakezelés review” / I pont)
 **Fájl:** `0_Framework/SetTransactionStatus.xaml`  
 **Probléma:** A `SetTransactionStatus` aktivitás `FolderPath` paramétere hardkódolva tartalmazza a `"Processes/Teszt"` értéket. Ha az Orchestrator mappája eltér, a queue státusz frissítése sikertelen lesz.  
 **Javítás:** A mappa elérési útját a `Config.xlsx`-ből kell olvasni (pl. `Config["OrchestratorFolder"]`).
@@ -212,18 +212,18 @@ if (!GlobalVariables.Config.ContainsKey("ProcessesToKill") || GlobalVariables.Co
 | B | `GEH_Process.xaml`, `Main.xaml` | `Data["ExceptionInfoStr"].ToString()` NullReferenceException, ha a GEH_Main nem egészítette ki a kivételt | `?.ToString() ?? exception.Message` |
 | C | `GEH_Main.xaml`, `GEH_Process.xaml` | Típusvizsgálat stringgel (`GetType().ToString() == "UiPath.Core.BusinessRuleException"`) – leszármazott osztály System-nek minősült | `is BusinessRuleException` |
 | D | `GEH_Main.xaml` | Minden változó / argumentum értéke maszkolás nélkül került a hibariportba (e-mail melléklet) | Érzékeny kulcsnevek és hitelesítő típusok maszkolása (`***`), értékek csonkolása 500 karakterre |
+| E | `GEH_Main.xaml` | A `result` (ErrorAction) nem volt explicit beállítva | `result = ErrorAction.Continue` a workflow végén |
+| F | `MainMachine.xaml` | `Elapsed.Seconds` csak a 0–59 másodperc-komponens | `Math.Round(Elapsed.TotalSeconds, 2)` |
+| G | `MainMachine.xaml`, `GEH_Process.xaml` | `RetryNo > 2` beégetve | `ErrorPolicy.IsLastAttempt(...)` + új `QueueMaxRetryNumber` Config kulcs |
+| H | `GEH_Process.xaml` | Mellékletlista dupla vesszővel, azonos DisplayName-ek | `string.Join(",", new[] { report, screenshot }.Where(File.Exists))`, DisplayName javítva |
+| I | `SetTransactionStatus.xaml`, `MainMachine.xaml` | Successful ág és GetQueueItem: `Processes/Teszt` / `Teszt_queue` beégetve | `Config["OrchestratorQueueFolder"]`, `Config["OrchestratorQueueName"]` |
+| J | `Main.xaml` | Config betöltési hiba esetén nem volt értesítés | `FW-CFG-002` kód, Fatal log, tartalék e-mail az új `in_FallbackAlertEmail` Main argumentumra |
 | – | új | Hibakód-katalógus | `1_GEH/ErrorHandling/*`, `Config.xlsx` / `ErrorCodes`, Reason / Details / Output kitöltése, `{errorCode}` / `{errorRemedy}` az e-mailben |
 
 ### 🔲 Nyitott
 
 | # | Hol | Probléma |
 |---|-----|----------|
-| E | `1_GEH/GEH_Main.xaml` | A `result` (ErrorAction) nincs explicit beállítva – az enum alapértékére hagyatkozik. Javasolt: `result = ErrorAction.Continue` |
-| F | `MainMachine.xaml` | `Elapsed.Seconds` helyett `Elapsed.TotalSeconds` kell (a Seconds csak a 0–59 komponens) |
-| G | `MainMachine.xaml`, `GEH_Process.xaml` | `RetryNo > 2` beégetve – nem követi a queue Max Retry beállítását |
-| H | `GEH_Process.xaml` | Mellékletlista: `report + "," + ("," + screenshot)` → dupla vessző; a három Switch-ág azonos |
-| I | `SetTransactionStatus.xaml` | Successful ágban `FolderPath="Processes/Teszt"` beégetve, a többi ág a Configból olvas |
-| J | `Main.xaml` | Config betöltési hiba esetén nincs értesítés (a címzettek is a Configban vannak) |
 | K | `SetTransactionStatus.xaml` | Ellenőrizni Orchestratorban, hogy Failed tételnél az `Output` (`ErrorCode`) mező megjelenik-e a queue exportban |
 | L | hibakód-katalógus – következő lépések | Idegen kivételek osztályozása (típus + regex → kód), `Owner` alapú címzett-routing, statikus teszt a használt / katalogizált kódokra, hiba-ujjlenyomat alapú e-mail deduplikáció |
 

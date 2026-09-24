@@ -52,6 +52,18 @@
       "IsPrincipal": true,
       "ArgumentType": 0,
       "DataSourceItems": null
+    },
+    {
+      "Name": "in_FallbackAlertEmail",
+      "DisplayName": "in_FallbackAlertEmail",
+      "Category": null,
+      "Tooltip": "Tartalék értesítési cím(ek) Config betöltési hiba esetén. Vesszővel elválasztva.",
+      "Placeholder": null,
+      "Widget": null,
+      "IsRequired": false,
+      "IsPrincipal": true,
+      "ArgumentType": 0,
+      "DataSourceItems": null
     }
   ]
 }

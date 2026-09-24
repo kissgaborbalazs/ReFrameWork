@@ -768,7 +768,7 @@
                                 </ui:AssignOperation.To>
                                 <ui:AssignOperation.Value>
                                   <InArgument x:TypeArguments="x:Boolean">
-                                    <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_40">Convert.ToBoolean(GlobalVariables.Config["ShouldSendSysExEmails"]) &amp;&amp; in_CurrentTransaction.RetryNo &gt; 2</CSharpValue>
+                                    <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_40">Convert.ToBoolean(GlobalVariables.Config["ShouldSendSysExEmails"]) &amp;&amp; ErrorPolicy.IsLastAttempt(in_CurrentTransaction.RetryNo, GlobalVariables.Config.GetValueOrDefault(ErrorPolicy.QueueMaxRetryNumberKey))</CSharpValue>
                                   </InArgument>
                                 </ui:AssignOperation.Value>
                               </ui:AssignOperation>
@@ -1206,7 +1206,7 @@ GlobalVariables.Config["SystemExceptionEmailAddresses"].ToString()</CSharpValue>
                 <ui:IfElseIfBlock BlockType="ElseIf" sap2010:WorkflowViewState.IdRef="IfElseIfBlock_4">
                   <ui:IfElseIfBlock.Condition>
                     <InArgument x:TypeArguments="x:Boolean">
-                      <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_58">out_ExceptionType == "System" &amp;&amp; in_CurrentTransaction.RetryNo &gt; 2</CSharpValue>
+                      <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_58">out_ExceptionType == "System" &amp;&amp; ErrorPolicy.IsLastAttempt(in_CurrentTransaction.RetryNo, GlobalVariables.Config.GetValueOrDefault(ErrorPolicy.QueueMaxRetryNumberKey))</CSharpValue>
                     </InArgument>
                   </ui:IfElseIfBlock.Condition>
                   <ui:IfElseIfBlock.Then>
@@ -1277,14 +1277,11 @@ GlobalVariables.Config["SystemExceptionEmailAddresses"].ToString()</CSharpValue>
         </Assign.To>
         <Assign.Value>
           <InArgument x:TypeArguments="x:String">
-            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_62" xml:space="preserve">exceptionReportPath + "," + 
-(File.Exists(exceptionScreenshotPath)
-	? ","+ exceptionScreenshotPath
-	: "")</CSharpValue>
+            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_62" xml:space="preserve">string.Join(",", new[] { exceptionReportPath, exceptionScreenshotPath }.Where(File.Exists))</CSharpValue>
           </InArgument>
         </Assign.Value>
       </Assign>
-      <Assign x:Key="System" DisplayName="set attachement (Business Exception)" sap:VirtualizedContainerService.HintSize="262.4,64" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign x:Key="System" DisplayName="set attachement (System Exception)" sap:VirtualizedContainerService.HintSize="262.4,64" sap2010:WorkflowViewState.IdRef="Assign_3">
         <Assign.To>
           <OutArgument x:TypeArguments="x:String">
             <CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_48">attachments</CSharpReference>
@@ -1292,14 +1289,11 @@ GlobalVariables.Config["SystemExceptionEmailAddresses"].ToString()</CSharpValue>
         </Assign.To>
         <Assign.Value>
           <InArgument x:TypeArguments="x:String">
-            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_63" xml:space="preserve">exceptionReportPath + "," + 
-(File.Exists(exceptionScreenshotPath)
-	? ","+ exceptionScreenshotPath
-	: "")</CSharpValue>
+            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_63" xml:space="preserve">string.Join(",", new[] { exceptionReportPath, exceptionScreenshotPath }.Where(File.Exists))</CSharpValue>
           </InArgument>
         </Assign.Value>
       </Assign>
-      <Assign x:Key="Main" DisplayName="set attachement (Business Exception)" sap:VirtualizedContainerService.HintSize="262.4,64" sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign x:Key="Main" DisplayName="set attachement (Main Exception)" sap:VirtualizedContainerService.HintSize="262.4,64" sap2010:WorkflowViewState.IdRef="Assign_5">
         <Assign.To>
           <OutArgument x:TypeArguments="x:String">
             <CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_50">attachments</CSharpReference>
@@ -1307,10 +1301,7 @@ GlobalVariables.Config["SystemExceptionEmailAddresses"].ToString()</CSharpValue>
         </Assign.To>
         <Assign.Value>
           <InArgument x:TypeArguments="x:String">
-            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_65" xml:space="preserve">exceptionReportPath + "," + 
-(File.Exists(exceptionScreenshotPath)
-	? ","+ exceptionScreenshotPath
-	: "")</CSharpValue>
+            <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_65" xml:space="preserve">string.Join(",", new[] { exceptionReportPath, exceptionScreenshotPath }.Where(File.Exists))</CSharpValue>
           </InArgument>
         </Assign.Value>
       </Assign>

@@ -585,7 +585,17 @@
                                     <av:PointCollection x:Key="ConnectorLocation">505,423.52 505,453.52 504,453.52 504,569.5</av:PointCollection>
                                   </scg:Dictionary>
                                 </sap:WorkflowViewStateService.ViewState>
-                                <ui:GetQueueItem ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" sap2010:Annotation.AnnotationText="Get transaction item from specified Orchestrator queue&#xA;&#xA;If there's no transaction items remaining, bot moves to the End Process state" DisplayName="Get Transaction Item" FolderPath="Processes/Teszt" sap:VirtualizedContainerService.HintSize="110,70" sap2010:WorkflowViewState.IdRef="GetQueueItem_1" QueueType="Teszt_queue">
+                                <ui:GetQueueItem ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" sap2010:Annotation.AnnotationText="Get transaction item from specified Orchestrator queue&#xA;&#xA;If there's no transaction items remaining, bot moves to the End Process state" DisplayName="Get Transaction Item" sap:VirtualizedContainerService.HintSize="110,70" sap2010:WorkflowViewState.IdRef="GetQueueItem_1">
+                                  <ui:GetQueueItem.FolderPath>
+                                    <InArgument x:TypeArguments="x:String">
+                                      <CSharpValue x:TypeArguments="x:String">GlobalVariables.Config["OrchestratorQueueFolder"].ToString()</CSharpValue>
+                                    </InArgument>
+                                  </ui:GetQueueItem.FolderPath>
+                                  <ui:GetQueueItem.QueueType>
+                                    <InArgument x:TypeArguments="x:String">
+                                      <CSharpValue x:TypeArguments="x:String">GlobalVariables.Config["OrchestratorQueueName"].ToString()</CSharpValue>
+                                    </InArgument>
+                                  </ui:GetQueueItem.QueueType>
                                   <ui:GetQueueItem.Reference>
                                     <InArgument x:TypeArguments="x:String" />
                                   </ui:GetQueueItem.Reference>
@@ -684,7 +694,7 @@
                                 </Assign.To>
                                 <Assign.Value>
                                   <InArgument x:TypeArguments="x:Object">
-                                    <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_47">in_InitTimer.Elapsed.Seconds</CSharpValue>
+                                    <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_47">Math.Round(in_InitTimer.Elapsed.TotalSeconds, 2)</CSharpValue>
                                   </InArgument>
                                 </Assign.Value>
                                 <sap:WorkflowViewStateService.ViewState>
@@ -869,7 +879,7 @@
                                     <ui:IfElseIfBlock BlockType="ElseIf" sap2010:WorkflowViewState.IdRef="IfElseIfBlock_5">
                                       <ui:IfElseIfBlock.Condition>
                                         <InArgument x:TypeArguments="x:Boolean">
-                                          <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_35">ExceptionType == "System" &amp;&amp; TransactionItem.RetryNo &gt; 2</CSharpValue>
+                                          <CSharpValue x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpValue`1_35">ExceptionType == "System" &amp;&amp; ErrorPolicy.IsLastAttempt(TransactionItem.RetryNo, GlobalVariables.Config.GetValueOrDefault(ErrorPolicy.QueueMaxRetryNumberKey))</CSharpValue>
                                         </InArgument>
                                       </ui:IfElseIfBlock.Condition>
                                       <ui:IfElseIfBlock.Then>
@@ -919,7 +929,7 @@
                                 </Assign.To>
                                 <Assign.Value>
                                   <InArgument x:TypeArguments="x:Object">
-                                    <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_50">processingTimer.Elapsed.Seconds</CSharpValue>
+                                    <CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_50">Math.Round(processingTimer.Elapsed.TotalSeconds, 2)</CSharpValue>
                                   </InArgument>
                                 </Assign.Value>
                                 <sap:WorkflowViewStateService.ViewState>

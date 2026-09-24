@@ -138,5 +138,17 @@
         </sc:BindingList>
       </ui:IfElseIf.ConditionBlocks>
     </ui:IfElseIf>
+    <Assign sap2010:Annotation.AnnotationText="Explicit döntés: a kivétel továbbdobódik (rethrow), így a hívó TryCatch (MainMachine / Main) kezeli.&#xA;Ne hagyd az enum alapértékére – az implicit viselkedés verziófüggő és nem olvasható ki a workflow-ból." DisplayName="Set result - Continue (rethrow)">
+      <Assign.To>
+        <OutArgument x:TypeArguments="uico:ErrorAction">
+          <CSharpReference x:TypeArguments="uico:ErrorAction">result</CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="uico:ErrorAction">
+          <CSharpValue x:TypeArguments="uico:ErrorAction">ErrorAction.Continue</CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
   </Sequence>
 </Activity>

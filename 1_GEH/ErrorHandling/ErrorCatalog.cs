@@ -40,6 +40,8 @@ namespace GEHMPRTQUEUECSharp.ErrorHandling
                 "Ellenőrizd a célalkalmazások elérhetőségét, majd a korábbi rendszerhibák riportjait. A folyamat leállt."),
             new("FW-CFG-001", "Hibás hibakód-katalógus a Config.xlsx ErrorCodes lapján: {0}",
                 "Javítsd az ErrorCodes lapot: a Code oszlop kötelező és egyedi, a Message oszlop kötelező."),
+            new("FW-CFG-002", "A konfiguráció betöltése sikertelen: {0}",
+                "Ellenőrizd a Config.xlsx elérési útját (in_ConfigFilePath), hogy a fájl nincs-e nyitva, valamint az Assets lapon felsorolt Orchestrator assetek létezését és jogosultságait."),
         };
 
         /// <summary>Az aktuálisan érvényes (alap + projekt) katalógus.</summary>

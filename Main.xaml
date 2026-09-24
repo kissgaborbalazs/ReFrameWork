@@ -4,6 +4,7 @@
     <x:Property sap2010:Annotation.AnnotationText="A folyamat által használt config fájl elérési útvonala. Alapértelmezett érték &quot;Configuration\Config.xlsx&quot;" Name="in_ConfigFilePath" Type="InArgument(x:String)" />
     <x:Property sap2010:Annotation.AnnotationText="Az egyes Jobok által feldolgozható Queue elemek maximális száma. 1 nél kisebb érték esetén 1 kerül beállításra" Name="in_Limit" Type="InArgument(x:Int32)" />
     <x:Property sap2010:Annotation.AnnotationText="Feldolgozás leállítása a Limit argumentumban beállított elem feldolgozása után. Alapértelmazett érék &quot;True&quot;" Name="in_StopAtLimit" Type="InArgument(x:Boolean)" />
+    <x:Property sap2010:Annotation.AnnotationText="Tartalék értesítési cím(ek), vesszővel elválasztva. Akkor kap e-mailt, ha a Config.xlsx betöltése hibázik (ilyenkor a Config-ban tárolt címzettek sem ismertek). Üresen hagyva csak log és Terminate történik." Name="in_FallbackAlertEmail" Type="InArgument(x:String)" />
   </x:Members>
   <this:Main.in_NonWorkingHours>
     <InArgument x:TypeArguments="x:String">
@@ -239,20 +240,115 @@
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
             </ActivityAction.Argument>
-            <TerminateWorkflow sap2010:Annotation.AnnotationText="Terminate with custom error message from GEH_Main" DisplayName="Terminate Workflow - initialize failed" sap:VirtualizedContainerService.HintSize="334,117" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3">
-              <TerminateWorkflow.Reason>
-                <InArgument x:TypeArguments="x:String">
-                  <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_6">"Failed to retrieve settings from Config.xlsx, so the bot will terminate. "+ (exception.Data["ExceptionInfoStr"]?.ToString() ?? exception.Message)</CSharpValue>
-                </InArgument>
-              </TerminateWorkflow.Reason>
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
-                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-            </TerminateWorkflow>
+            <Sequence sap2010:Annotation.AnnotationText="Config nélkül a Config-ban tárolt címzettek sem ismertek. Ezért a tartalék címzett a Main in_FallbackAlertEmail argumentumából jön (Orchestrator process / job argumentum).&#xA;Az értesítés hibája nem akadályozhatja a Terminate lefutását." DisplayName="Handle config load failure">
+              <ui:LogMessage DisplayName="Log Message - config load failed">
+                <ui:LogMessage.Level>
+                  <InArgument x:TypeArguments="ui:LogLevel">
+                    <CSharpValue x:TypeArguments="ui:LogLevel">UiPath.Core.Activities.LogLevel.Fatal</CSharpValue>
+                  </InArgument>
+                </ui:LogMessage.Level>
+                <ui:LogMessage.Message>
+                  <InArgument x:TypeArguments="x:Object">
+                    <CSharpValue x:TypeArguments="x:Object">ErrorCatalog.Format("FW-CFG-002", exception.Message)</CSharpValue>
+                  </InArgument>
+                </ui:LogMessage.Message>
+              </ui:LogMessage>
+              <If DisplayName="If fallback alert e-mail is set">
+                <If.Condition>
+                  <InArgument x:TypeArguments="x:Boolean">
+                    <CSharpValue x:TypeArguments="x:Boolean">!string.IsNullOrWhiteSpace(in_FallbackAlertEmail)</CSharpValue>
+                  </InArgument>
+                </If.Condition>
+                <If.Then>
+                  <TryCatch DisplayName="Try to send fallback alert">
+                    <TryCatch.Try>
+                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Send fallback alert e-mail" UnSafe="False" WorkflowFileName="0_Framework\\SendEmail.xaml">
+                        <ui:InvokeWorkflowFile.Arguments>
+                          <InArgument x:TypeArguments="x:Boolean" x:Key="in_Debug">False</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_BCc">
+                            <CSharpValue x:TypeArguments="x:String">string.Empty</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_ReplyTo">
+                            <CSharpValue x:TypeArguments="x:String">string.Empty</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_MailPriority">1</InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_MessageBody">
+                            <CSharpValue x:TypeArguments="x:String">"&lt;p&gt;A robot a konfiguráció betöltése közben leállt.&lt;/p&gt;" + "&lt;p&gt;&lt;b&gt;Hiba:&lt;/b&gt; " + System.Net.WebUtility.HtmlEncode(ErrorCatalog.Format("FW-CFG-002", exception.Message)) + "&lt;/p&gt;" + "&lt;p&gt;&lt;b&gt;Javítási javaslat:&lt;/b&gt; " + System.Net.WebUtility.HtmlEncode(ErrorCatalog.Remedy("FW-CFG-002")) + "&lt;/p&gt;" + "&lt;p&gt;Config: " + System.Net.WebUtility.HtmlEncode(in_ConfigFilePath ?? "N/A") + "&lt;br/&gt;Gép: " + Environment.MachineName + "&lt;br/&gt;Felhasználó: " + Environment.UserName + "&lt;/p&gt;"</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_Attachments">
+                            <CSharpValue x:TypeArguments="x:String">string.Empty</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_SendTo">
+                            <CSharpValue x:TypeArguments="x:String">in_FallbackAlertEmail</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_Subject">
+                            <CSharpValue x:TypeArguments="x:String">"[FW-CFG-002] Config betöltési hiba - " + Environment.MachineName</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="x:String" x:Key="in_From">
+                            <CSharpValue x:TypeArguments="x:String">"RPA robot"</CSharpValue>
+                          </InArgument>
+                          <InArgument x:TypeArguments="s:Guid" x:Key="out_Guid" />
+                          <InArgument x:TypeArguments="x:Int32" x:Key="out_ResponseStatus" />
+                          <InArgument x:TypeArguments="x:String" x:Key="out_ResponseContent" />
+                          <InArgument x:TypeArguments="x:String" x:Key="in_CC">
+                            <CSharpValue x:TypeArguments="x:String">string.Empty</CSharpValue>
+                          </InArgument>
+                        </ui:InvokeWorkflowFile.Arguments>
+                      </ui:InvokeWorkflowFile>
+                    </TryCatch.Try>
+                    <TryCatch.Catches>
+                      <Catch x:TypeArguments="s:Exception">
+                        <ActivityAction x:TypeArguments="s:Exception">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="s:Exception" Name="mailException" />
+                          </ActivityAction.Argument>
+                          <ui:LogMessage DisplayName="Log Message - fallback alert failed">
+                            <ui:LogMessage.Level>
+                              <InArgument x:TypeArguments="ui:LogLevel">
+                                <CSharpValue x:TypeArguments="ui:LogLevel">UiPath.Core.Activities.LogLevel.Error</CSharpValue>
+                              </InArgument>
+                            </ui:LogMessage.Level>
+                            <ui:LogMessage.Message>
+                              <InArgument x:TypeArguments="x:Object">
+                                <CSharpValue x:TypeArguments="x:Object">"Fallback alert e-mail could not be sent: " + mailException.Message</CSharpValue>
+                              </InArgument>
+                            </ui:LogMessage.Message>
+                          </ui:LogMessage>
+                        </ActivityAction>
+                      </Catch>
+                    </TryCatch.Catches>
+                  </TryCatch>
+                </If.Then>
+                <If.Else>
+                  <ui:LogMessage DisplayName="Log Message - no fallback recipient">
+                    <ui:LogMessage.Level>
+                      <InArgument x:TypeArguments="ui:LogLevel">
+                        <CSharpValue x:TypeArguments="ui:LogLevel">UiPath.Core.Activities.LogLevel.Warn</CSharpValue>
+                      </InArgument>
+                    </ui:LogMessage.Level>
+                    <ui:LogMessage.Message>
+                      <InArgument x:TypeArguments="x:Object">
+                        <CSharpValue x:TypeArguments="x:Object">"in_FallbackAlertEmail is empty, no alert e-mail was sent about the config load failure."</CSharpValue>
+                      </InArgument>
+                    </ui:LogMessage.Message>
+                  </ui:LogMessage>
+                </If.Else>
+              </If>
+              <TerminateWorkflow sap2010:Annotation.AnnotationText="Terminate with custom error message from GEH_Main" DisplayName="Terminate Workflow - initialize failed" sap:VirtualizedContainerService.HintSize="334,117" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3">
+                <TerminateWorkflow.Reason>
+                  <InArgument x:TypeArguments="x:String">
+                    <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_6">ErrorCatalog.Format("FW-CFG-002", exception.Data["ExceptionInfoStr"]?.ToString() ?? exception.Message)</CSharpValue>
+                  </InArgument>
+                </TerminateWorkflow.Reason>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </TerminateWorkflow>
+            </Sequence>
           </ActivityAction>
         </Catch>
       </TryCatch.Catches>
