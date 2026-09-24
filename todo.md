@@ -201,6 +201,34 @@ if (!GlobalVariables.Config.ContainsKey("ProcessesToKill") || GlobalVariables.Co
 
 ---
 
+## Hibakezelés review (2. kör)
+
+### ✅ Javítva
+
+| # | Hol | Probléma | Javítás |
+|---|-----|----------|---------|
+| A | `MainMachine.xaml` Process Transaction Catch / Finally | Ha a `GEH_Process` hibázott, az `out_ExceptionType` nem jutott vissza, és a Finally ág **Successful** státuszt állított a hibás tételre | A kimenetel (`ExceptionType`, `ExceptionMessage`, `ErrorCode`) a Catch elején kerül beállításra, a `GEH_Process` TryCatch-ben fut (Error log) |
+| A2 | `Main.xaml` Main catch | `GEH_Process` hibája esetén a `KillAllProcesses` és a Terminate nem futott le | `GEH_Process` TryCatch-ben |
+| B | `GEH_Process.xaml`, `Main.xaml` | `Data["ExceptionInfoStr"].ToString()` NullReferenceException, ha a GEH_Main nem egészítette ki a kivételt | `?.ToString() ?? exception.Message` |
+| C | `GEH_Main.xaml`, `GEH_Process.xaml` | Típusvizsgálat stringgel (`GetType().ToString() == "UiPath.Core.BusinessRuleException"`) – leszármazott osztály System-nek minősült | `is BusinessRuleException` |
+| D | `GEH_Main.xaml` | Minden változó / argumentum értéke maszkolás nélkül került a hibariportba (e-mail melléklet) | Érzékeny kulcsnevek és hitelesítő típusok maszkolása (`***`), értékek csonkolása 500 karakterre |
+| – | új | Hibakód-katalógus | `1_GEH/ErrorHandling/*`, `Config.xlsx` / `ErrorCodes`, Reason / Details / Output kitöltése, `{errorCode}` / `{errorRemedy}` az e-mailben |
+
+### 🔲 Nyitott
+
+| # | Hol | Probléma |
+|---|-----|----------|
+| E | `1_GEH/GEH_Main.xaml` | A `result` (ErrorAction) nincs explicit beállítva – az enum alapértékére hagyatkozik. Javasolt: `result = ErrorAction.Continue` |
+| F | `MainMachine.xaml` | `Elapsed.Seconds` helyett `Elapsed.TotalSeconds` kell (a Seconds csak a 0–59 komponens) |
+| G | `MainMachine.xaml`, `GEH_Process.xaml` | `RetryNo > 2` beégetve – nem követi a queue Max Retry beállítását |
+| H | `GEH_Process.xaml` | Mellékletlista: `report + "," + ("," + screenshot)` → dupla vessző; a három Switch-ág azonos |
+| I | `SetTransactionStatus.xaml` | Successful ágban `FolderPath="Processes/Teszt"` beégetve, a többi ág a Configból olvas |
+| J | `Main.xaml` | Config betöltési hiba esetén nincs értesítés (a címzettek is a Configban vannak) |
+| K | `SetTransactionStatus.xaml` | Ellenőrizni Orchestratorban, hogy Failed tételnél az `Output` (`ErrorCode`) mező megjelenik-e a queue exportban |
+| L | hibakód-katalógus – következő lépések | Idegen kivételek osztályozása (típus + regex → kód), `Owner` alapú címzett-routing, statikus teszt a használt / katalogizált kódokra, hiba-ujjlenyomat alapú e-mail deduplikáció |
+
+---
+
 ## Összefoglaló
 
 | Prioritás | Darab |

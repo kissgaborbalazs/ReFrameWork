@@ -41,6 +41,7 @@
       <x:String>System.ComponentModel</x:String>
       <x:String>System.Runtime.Serialization</x:String>
       <x:String>MPRT.Utilities.Extensions</x:String>
+      <x:String>GEHMPRTQUEUECSharp.ErrorHandling</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -92,6 +93,7 @@
       <AssemblyReference>System.Linq.Async</AssemblyReference>
       <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
       <AssemblyReference>MPRT.Utilities.Core</AssemblyReference>
+      <AssemblyReference>GEH MPRT QUEUE CSharp.Core</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Flowchart sap2010:Annotation.AnnotationText="A végrehajtandó üzleti folyamat főbb lépéseinek meghívása több alfolyamat segítségével.&#xA;&#xA;Amennyiben BusinessRuleException keletkezik, a tranzakció kihagyásra kerül. Ha rendszerkivétel fordul elő, a tranzakció újra megkísérelhető.&#xA;&#xA;FONTOS: Mivel a globális kivételkezelő részletesebb információt nyújt a kivételekről, mint egy try-catch blokk, ezért nincs szükség try-catch logika használatára sem a Process.xaml fájlban, sem pedig azokban a xaml fájlokban, amelyeket a Process.xaml meghív." DisplayName="Process" sap:VirtualizedContainerService.HintSize="1244,579.04" sap2010:WorkflowViewState.IdRef="Flowchart_1">
@@ -155,7 +157,7 @@
                     <ui:IfElseIfBlock.Then>
                       <Throw sap:VirtualizedContainerService.HintSize="334,90" sap2010:WorkflowViewState.IdRef="Throw_1">
                         <InArgument x:TypeArguments="s:Exception">
-                          <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_7">new BusinessRuleException("BusinessRuleExceptionTest")</CSharpValue>
+                          <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_7">Err.Business("PRJ-BE-001", in_TransactionItem.Reference)</CSharpValue>
                         </InArgument>
                       </Throw>
                     </ui:IfElseIfBlock.Then>
@@ -169,7 +171,7 @@
                     <ui:IfElseIfBlock.Then>
                       <Throw sap:VirtualizedContainerService.HintSize="334,90" sap2010:WorkflowViewState.IdRef="Throw_2">
                         <InArgument x:TypeArguments="s:Exception">
-                          <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_8">new SystemException("SystemExceptionTest")</CSharpValue>
+                          <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_8">Err.System("PRJ-SYS-001", in_TransactionItem.Reference)</CSharpValue>
                         </InArgument>
                       </Throw>
                     </ui:IfElseIfBlock.Then>

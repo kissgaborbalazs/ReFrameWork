@@ -44,6 +44,7 @@
       <x:String>System.ComponentModel</x:String>
       <x:String>System.Xml.Serialization</x:String>
       <x:String>System.IO</x:String>
+      <x:String>GEHMPRTQUEUECSharp.ErrorHandling</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -105,6 +106,7 @@
       <AssemblyReference>System.IO.FileSystem.DriveInfo</AssemblyReference>
       <AssemblyReference>MPRT.Utilities.Core</AssemblyReference>
       <AssemblyReference>System.Linq.Async</AssemblyReference>
+      <AssemblyReference>GEH MPRT QUEUE CSharp.Core</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Initialize and populate configuration/credential dictionaries to be used throughout the project. &#xA;Settings are read from the local configuration file, and assets are fetched from Orchestrator. &#xA;Asset values overwrite settings if they are defined with the same name." DisplayName="InitAllSettings" sap:VirtualizedContainerService.HintSize="1535,1421" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -562,6 +564,13 @@
         </scg:Dictionary>
       </sap:WorkflowViewStateService.ViewState>
     </ui:ForEach>
+    <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Projekt szintű hibakódok betöltése a Config.xlsx ErrorCodes lapjáról (Code, Message, Remedy).&#xA;Ha a lap hiányzik vagy üres, csak a framework alapkódok (FW-*) aktívak." DisplayName="Load error catalog" UnSafe="False" WorkflowFileName="1_GEH\ErrorHandling\LoadErrorCatalog.cs">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="errorCodes">
+          <CSharpValue x:TypeArguments="sd:DataTable">Workbook.Worksheets.Contains("ErrorCodes") ? Workbook.Worksheet("ErrorCodes").RangeUsed()?.AsTable().AsNativeDataTable() : null</CSharpValue>
+        </InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
     <Assign DisplayName="set ExceptionFolder asset" sap:VirtualizedContainerService.HintSize="547,115" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:Object">

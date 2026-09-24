@@ -46,6 +46,7 @@
       <x:String>System.Runtime.Serialization</x:String>
       <x:String>System.Management.Automation</x:String>
       <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>GEHMPRTQUEUECSharp.ErrorHandling</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -241,7 +242,7 @@
             <TerminateWorkflow sap2010:Annotation.AnnotationText="Terminate with custom error message from GEH_Main" DisplayName="Terminate Workflow - initialize failed" sap:VirtualizedContainerService.HintSize="334,117" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3">
               <TerminateWorkflow.Reason>
                 <InArgument x:TypeArguments="x:String">
-                  <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_6">"Failed to retrieve settings from Config.xlsx, so the bot will terminate. "+ exception.Data["ExceptionInfoStr"].ToString()</CSharpValue>
+                  <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_6">"Failed to retrieve settings from Config.xlsx, so the bot will terminate. "+ (exception.Data["ExceptionInfoStr"]?.ToString() ?? exception.Message)</CSharpValue>
                 </InArgument>
               </TerminateWorkflow.Reason>
               <sap:WorkflowViewStateService.ViewState>
@@ -316,18 +317,43 @@
                   <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                 </scg:Dictionary>
               </sap:WorkflowViewStateService.ViewState>
-              <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="1_GEH\\GEH_Process.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="382,204" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="1_GEH\\GEH_Process.xaml">
-                <ui:InvokeWorkflowFile.Arguments>
-                  <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMessage" />
-                  <InArgument x:TypeArguments="s:Exception" x:Key="in_Exception">
-                    <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_12">exception</CSharpValue>
-                  </InArgument>
-                  <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionType" />
-                  <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_CurrentTransaction">
-                    <CSharpValue x:TypeArguments="ui:QueueItem" sap2010:WorkflowViewState.IdRef="CSharpValue`1_15">null</CSharpValue>
-                  </InArgument>
-                </ui:InvokeWorkflowFile.Arguments>
-              </ui:InvokeWorkflowFile>
+              <TryCatch sap2010:Annotation.AnnotationText="A hibadokumentáció hibája ne akadályozza meg a KillAllProcesses és a Terminate lefutását." DisplayName="Try to report Main exception">
+                <TryCatch.Try>
+                  <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="1_GEH\\GEH_Process.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="382,204" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="1_GEH\\GEH_Process.xaml">
+                    <ui:InvokeWorkflowFile.Arguments>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMessage" />
+                      <InArgument x:TypeArguments="s:Exception" x:Key="in_Exception">
+                        <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_12">exception</CSharpValue>
+                      </InArgument>
+                      <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionType" />
+                      <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_CurrentTransaction">
+                        <CSharpValue x:TypeArguments="ui:QueueItem" sap2010:WorkflowViewState.IdRef="CSharpValue`1_15">null</CSharpValue>
+                      </InArgument>
+                    </ui:InvokeWorkflowFile.Arguments>
+                  </ui:InvokeWorkflowFile>
+                </TryCatch.Try>
+                <TryCatch.Catches>
+                  <Catch x:TypeArguments="s:Exception">
+                    <ActivityAction x:TypeArguments="s:Exception">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="s:Exception" Name="gehException" />
+                      </ActivityAction.Argument>
+                      <ui:LogMessage DisplayName="Log Message - GEH_Process failed">
+                        <ui:LogMessage.Level>
+                          <InArgument x:TypeArguments="ui:LogLevel">
+                            <CSharpValue x:TypeArguments="ui:LogLevel">UiPath.Core.Activities.LogLevel.Error</CSharpValue>
+                          </InArgument>
+                        </ui:LogMessage.Level>
+                        <ui:LogMessage.Message>
+                          <InArgument x:TypeArguments="x:Object">
+                            <CSharpValue x:TypeArguments="x:Object">"GEH_Process failed, exception report / e-mail was not created: " + gehException.Message</CSharpValue>
+                          </InArgument>
+                        </ui:LogMessage.Message>
+                      </ui:LogMessage>
+                    </ActivityAction>
+                  </Catch>
+                </TryCatch.Catches>
+              </TryCatch>
               <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="0_Framework\\KillAllProcesses.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="382,204" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="0_Framework\\KillAllProcesses.xaml">
                 <ui:InvokeWorkflowFile.Arguments>
                   <scg:Dictionary x:TypeArguments="x:String, Argument" />
@@ -336,7 +362,7 @@
               <TerminateWorkflow DisplayName="Terminate Workflow - Main Exception" sap:VirtualizedContainerService.HintSize="338,117" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_4">
                 <TerminateWorkflow.Reason>
                   <InArgument x:TypeArguments="x:String">
-                    <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_13">exception.Data["ExceptionInfoStr"].ToString()</CSharpValue>
+                    <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_13">ErrorCatalog.ToReason(ErrorCatalog.Resolve(exception), exception.Data["ExceptionInfoStr"]?.ToString() ?? exception.Message)</CSharpValue>
                   </InArgument>
                 </TerminateWorkflow.Reason>
               </TerminateWorkflow>

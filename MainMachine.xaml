@@ -39,6 +39,7 @@
       <x:String>UiPath.Platform.ResourceHandling</x:String>
       <x:String>System.Drawing</x:String>
       <x:String>System.Numerics</x:String>
+      <x:String>GEHMPRTQUEUECSharp.ErrorHandling</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -377,7 +378,7 @@
                         <ui:IfElseIfBlock.Then>
                           <Throw DisplayName="Throw Max Exceptions" sap:VirtualizedContainerService.HintSize="334,90" sap2010:WorkflowViewState.IdRef="Throw_1">
                             <InArgument x:TypeArguments="s:Exception">
-                              <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_10">new Exception("The maximum number of consecutive transaction system exceptions was reached: " + ConsecutiveSystemExceptions.ToString())</CSharpValue>
+                              <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_10">Err.System("FW-SYS-001", ConsecutiveSystemExceptions)</CSharpValue>
                             </InArgument>
                           </Throw>
                         </ui:IfElseIfBlock.Then>
@@ -718,6 +719,18 @@
                                   </InArgument>
                                 </Assign.Value>
                               </Assign>
+                              <Assign DisplayName="reset ErrorCode">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:String">
+                                    <CSharpReference x:TypeArguments="x:String">ErrorCode</CSharpReference>
+                                  </OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:String">
+                                    <CSharpValue x:TypeArguments="x:String">null</CSharpValue>
+                                  </InArgument>
+                                </Assign.Value>
+                              </Assign>
                               <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Process.xaml - Invoke Workflow File" sap:VirtualizedContainerService.HintSize="434,195" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Process.xaml">
                                 <ui:InvokeWorkflowFile.Arguments>
                                   <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">
@@ -739,22 +752,85 @@
                                 <ActivityAction.Argument>
                                   <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
                                 </ActivityAction.Argument>
-                                <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke GEH_Process" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="1_GEH\\GEH_Process.xaml">
-                                  <ui:InvokeWorkflowFile.Arguments>
-                                    <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionMessage">
-                                      <CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_8">ExceptionMessage</CSharpReference>
-                                    </OutArgument>
-                                    <InArgument x:TypeArguments="s:Exception" x:Key="in_Exception">
-                                      <CSharpValue x:TypeArguments="s:Exception" sap2010:WorkflowViewState.IdRef="CSharpValue`1_33">exception</CSharpValue>
-                                    </InArgument>
-                                    <OutArgument x:TypeArguments="x:String" x:Key="out_ExceptionType">
-                                      <CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_7">ExceptionType</CSharpReference>
-                                    </OutArgument>
-                                    <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_CurrentTransaction">
-                                      <CSharpValue x:TypeArguments="ui:QueueItem" sap2010:WorkflowViewState.IdRef="CSharpValue`1_32">TransactionItem</CSharpValue>
-                                    </InArgument>
-                                  </ui:InvokeWorkflowFile.Arguments>
-                                </ui:InvokeWorkflowFile>
+                                <Sequence DisplayName="Handle transaction exception">
+                                  <ui:MultipleAssign sap2010:Annotation.AnnotationText="A tranzakció kimenetele itt, a GEH_Process ELŐTT kerül beállításra. Így ha a riport / screenshot / e-mail készítése hibázik, a Finally ág akkor is a helyes státuszt állítja be (és nem Successful-t)." DisplayName="Set exception vars">
+                                    <ui:MultipleAssign.AssignOperations>
+                                      <scg:List x:TypeArguments="ui:AssignOperation" Capacity="4">
+                                  <ui:AssignOperation>
+                                    <ui:AssignOperation.To>
+                                      <OutArgument x:TypeArguments="x:String">
+                                        <CSharpReference x:TypeArguments="x:String">ExceptionType</CSharpReference>
+                                      </OutArgument>
+                                    </ui:AssignOperation.To>
+                                    <ui:AssignOperation.Value>
+                                      <InArgument x:TypeArguments="x:String">
+                                        <CSharpValue x:TypeArguments="x:String">exception is BusinessRuleException ? "Business" : "System"</CSharpValue>
+                                      </InArgument>
+                                    </ui:AssignOperation.Value>
+                                  </ui:AssignOperation>
+                                  <ui:AssignOperation>
+                                    <ui:AssignOperation.To>
+                                      <OutArgument x:TypeArguments="x:String">
+                                        <CSharpReference x:TypeArguments="x:String">ExceptionMessage</CSharpReference>
+                                      </OutArgument>
+                                    </ui:AssignOperation.To>
+                                    <ui:AssignOperation.Value>
+                                      <InArgument x:TypeArguments="x:String">
+                                        <CSharpValue x:TypeArguments="x:String">exception.Message + (exception.InnerException != null ? Environment.NewLine + exception.InnerException.Message : string.Empty)</CSharpValue>
+                                      </InArgument>
+                                    </ui:AssignOperation.Value>
+                                  </ui:AssignOperation>
+                                  <ui:AssignOperation>
+                                    <ui:AssignOperation.To>
+                                      <OutArgument x:TypeArguments="x:String">
+                                        <CSharpReference x:TypeArguments="x:String">ErrorCode</CSharpReference>
+                                      </OutArgument>
+                                    </ui:AssignOperation.To>
+                                    <ui:AssignOperation.Value>
+                                      <InArgument x:TypeArguments="x:String">
+                                        <CSharpValue x:TypeArguments="x:String">ErrorCatalog.Resolve(exception)</CSharpValue>
+                                      </InArgument>
+                                    </ui:AssignOperation.Value>
+                                  </ui:AssignOperation>
+                                      </scg:List>
+                                    </ui:MultipleAssign.AssignOperations>
+                                  </ui:MultipleAssign>
+                                  <TryCatch sap2010:Annotation.AnnotationText="A hibadokumentáció (riport, screenshot, e-mail) hibája nem írhatja felül a tranzakció kimenetelét, és nem állíthatja le a robotot." DisplayName="Try to report exception">
+                                    <TryCatch.Try>
+                                      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" ContinueOnError="{x:Null}" DisplayName="Invoke GEH_Process" UnSafe="False" WorkflowFileName="1_GEH\\GEH_Process.xaml">
+                                        <ui:InvokeWorkflowFile.Arguments>
+                                          <InArgument x:TypeArguments="s:Exception" x:Key="in_Exception">
+                                            <CSharpValue x:TypeArguments="s:Exception">exception</CSharpValue>
+                                          </InArgument>
+                                          <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_CurrentTransaction">
+                                            <CSharpValue x:TypeArguments="ui:QueueItem">TransactionItem</CSharpValue>
+                                          </InArgument>
+                                        </ui:InvokeWorkflowFile.Arguments>
+                                      </ui:InvokeWorkflowFile>
+                                    </TryCatch.Try>
+                                    <TryCatch.Catches>
+                                      <Catch x:TypeArguments="s:Exception">
+                                        <ActivityAction x:TypeArguments="s:Exception">
+                                          <ActivityAction.Argument>
+                                            <DelegateInArgument x:TypeArguments="s:Exception" Name="gehException" />
+                                          </ActivityAction.Argument>
+                                          <ui:LogMessage DisplayName="Log Message - GEH_Process failed">
+                                            <ui:LogMessage.Level>
+                                              <InArgument x:TypeArguments="ui:LogLevel">
+                                                <CSharpValue x:TypeArguments="ui:LogLevel">UiPath.Core.Activities.LogLevel.Error</CSharpValue>
+                                              </InArgument>
+                                            </ui:LogMessage.Level>
+                                            <ui:LogMessage.Message>
+                                              <InArgument x:TypeArguments="x:Object">
+                                                <CSharpValue x:TypeArguments="x:Object">"GEH_Process failed, exception report / e-mail was not created: " + gehException.Message + Environment.NewLine + "Original exception: [" + ErrorCode + "] " + ExceptionMessage</CSharpValue>
+                                              </InArgument>
+                                            </ui:LogMessage.Message>
+                                          </ui:LogMessage>
+                                        </ActivityAction>
+                                      </Catch>
+                                    </TryCatch.Catches>
+                                  </TryCatch>
+                                </Sequence>
                               </ActivityAction>
                             </Catch>
                           </TryCatch.Catches>
@@ -863,6 +939,9 @@
                                   </InOutArgument>
                                   <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">
                                     <CSharpValue x:TypeArguments="ui:QueueItem" sap2010:WorkflowViewState.IdRef="CSharpValue`1_39">TransactionItem</CSharpValue>
+                                  </InArgument>
+                                  <InArgument x:TypeArguments="x:String" x:Key="in_ErrorCode">
+                                    <CSharpValue x:TypeArguments="x:String">ErrorCode</CSharpValue>
                                   </InArgument>
                                   <InArgument x:TypeArguments="x:String" x:Key="in_ExceptionMessage">
                                     <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_43">ExceptionMessage</CSharpValue>
@@ -1023,6 +1102,7 @@
       <Variable x:TypeArguments="x:Boolean" sap2010:Annotation.AnnotationText="If a Stop signal is sent from Orchestrator, stop the automation" Name="ShouldStop" />
       <Variable x:TypeArguments="x:String" Name="ExceptionType" />
       <Variable x:TypeArguments="x:String" Name="ExceptionMessage" />
+      <Variable x:TypeArguments="x:String" Name="ErrorCode" />
       <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="AnalyticsData">
         <Variable.Default>
           <CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" sap2010:WorkflowViewState.IdRef="CSharpValue`1_52" xml:space="preserve">new Dictionary&lt;string, object&gt;

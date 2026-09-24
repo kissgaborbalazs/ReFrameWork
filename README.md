@@ -63,7 +63,11 @@ ReFrameWork/
 │   ├── GEH_Process.xaml             # Kivételkezelési folyamat (screenshot, riport, email)
 │   ├── GEH_CreateReport.xaml        # Excel hibajelentés generálása
 │   ├── BuildErrorDictionary.xaml    # Hibainformáció szótár összeállítása
-│   └── BuildErrorDictionary.cs      # C# segédosztály a hibainformáció-szótárhoz
+│   ├── BuildErrorDictionary.cs      # C# segédosztály a hibainformáció-szótárhoz
+│   └── ErrorHandling/               # Hibakód-katalógus
+│       ├── ErrorCatalog.cs          # Központi katalógus (FW-* alapkódok + projekt kódok)
+│       ├── Err.cs                   # Kivétel-factory: Err.Business / Err.System
+│       └── LoadErrorCatalog.cs      # Config.xlsx / ErrorCodes lap betöltése (InitAllSettings hívja)
 │
 ├── 2_Application_Layer/             # Alkalmazásréteg workflow-ok (fejlesztendő)
 ├── 3_Business_Logic/                # Üzleti logika workflow-ok (fejlesztendő)
@@ -200,6 +204,31 @@ Az `InitAllSettings.xaml` futtatása után a következő globális szótárak é
 | Rendszer kivétel | `SystemException` | `SystemExceptionHandling.xaml` meghívása, `ConsecutiveSystemExceptions` növelése, visszaugrik az Initialize állapotra | `Failed – Application Exception` |
 | Főfolyamat kivétel | Bármely nem kezelt kivétel | GEH_Process + KillAllProcesses + Terminate | – |
 
+### Hibakód-katalógus
+
+A kivétel dobásakor csak egy **hibakódot** (és az üzenet paramétereit) adunk meg. Az üzenet szövege és a **javítási javaslat** egy helyről, a katalógusból jön.
+
+| Réteg | Hol | Prefix | Megjegyzés |
+|-------|-----|--------|------------|
+| Framework alapkódok | `1_GEH/ErrorHandling/ErrorCatalog.cs` | `FW-` | Kódba égetve, Config nélkül is elérhetők |
+| Projekt kódok | `Configuration/Config.xlsx` / `ErrorCodes` lap (`Code`, `Message`, `Remedy`) | `PRJ-` | Azonos kódnál a projekt definíció felülírja az alapot |
+
+| Alapkód | Jelentés |
+|---------|----------|
+| `FW-BE-000` | Kód nélküli (nem katalogizált) `BusinessRuleException` |
+| `FW-SYS-000` | Kód nélküli (nem katalogizált) rendszerkivétel |
+| `FW-SYS-001` | Elérte az egymást követő rendszerkivételek maximumát |
+| `FW-CFG-001` | Hibás `ErrorCodes` lap (hiányzó oszlop, duplikált kód, üres Message) |
+
+**Adatfolyam:** `Err.Business/System` → a kód az `Exception.Data["ErrorCode"]` kulcson utazik → `MainMachine` Catch: `ErrorCatalog.Resolve(exception)` → `SetTransactionStatus`:
+
+- **Reason** = `[KÓD] üzenet`
+- **Details** = a katalógus javítási javaslata
+- **Output** = `ErrorCode` (queue exportból szűrhető, Pareto-elemzéshez)
+- **Hiba e-mail**: `{errorCode}` és `{errorRemedy}` helyőrzők az `ErrorMailTemplate.html`-ben
+
+A tranzakció kimenetele (Business / System, üzenet, kód) a `GEH_Process` **előtt** kerül beállításra, a `GEH_Process` pedig TryCatch-ben fut. Így a riport / screenshot / e-mail hibája nem tudja „Successful” státuszra állítani a hibás tételt, és nem állítja le a robotot.
+
 ### Maximális egymást követő rendszer kivételek
 
 Ha `ConsecutiveSystemExceptions >= Config["MaxConsecutiveSystemExceptions"]`, az Initialize állapot kivételt dob, és a folyamat leáll. Ez megakadályozza a végtelen újrapróbálkozást rendszerhiba esetén.
@@ -227,15 +256,24 @@ Ha `ConsecutiveSystemExceptions >= Config["MaxConsecutiveSystemExceptions"]`, az
 
 ### Kivétel dobása `Process.xaml`-ből
 
-```csharp
-// Üzleti kivétel (várt hiba, pl. hibás bemeneti adat):
-throw new BusinessRuleException("A reference nem található a rendszerben.");
+Ajánlott: hibakóddal, a factory-n keresztül (XAML **Throw** activity-ben vagy coded workflow-ban):
 
-// Rendszer kivétel (váratlan technikai hiba):
-throw new SystemException("Nem sikerült csatlakozni az adatbázishoz.");
+```csharp
+// Üzleti kivétel – a típus továbbra is BusinessRuleException:
+throw Err.Business("PRJ-BE-001", in_TransactionItem.Reference);
+
+// Rendszer kivétel:
+throw Err.System("PRJ-SYS-001", invoiceNo);
+
+// Rendszer kivétel az eredeti kivétel megtartásával (InnerException):
+throw Err.System("PRJ-SYS-002", ex, invoiceNo);
 ```
 
-A keretrendszer automatikusan kezeli a kivételt, és beállítja a megfelelő queue item státuszt.
+Új kód felvétele: új sor a `Config.xlsx` / `ErrorCodes` lapon (`Code` egyedi, `Message` = `string.Format` sablon `{0}`, `{1}` … helyőrzőkkel, `Remedy` = javítási javaslat). Ökölszabály: **egy kód = egy javítási teendő**.
+
+XAML-ben a `GEHMPRTQUEUECSharp.ErrorHandling` névteret importálni kell (Imports panel).
+
+A kód nélküli `throw new BusinessRuleException("...")` továbbra is működik – ilyenkor a kód `FW-BE-000`, rendszerhibánál `FW-SYS-000`.
 
 ---
 

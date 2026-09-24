@@ -21,6 +21,7 @@
       </x:Property.Attributes>
     </x:Property>
     <x:Property Name="in_AnalyticsData" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property sap2010:Annotation.AnnotationText="Hibakód (ErrorCatalog). A Reason mező [KÓD] előtagot, a Details mező a katalógus javítási javaslatát kapja." Name="in_ErrorCode" Type="InArgument(x:String)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap:VirtualizedContainerService.HintSize>943,1409</sap:VirtualizedContainerService.HintSize>
@@ -55,6 +56,7 @@
       <x:String>System.Reflection</x:String>
       <x:String>System.Collections.ObjectModel</x:String>
       <x:String>System.Runtime.Serialization</x:String>
+      <x:String>GEHMPRTQUEUECSharp.ErrorHandling</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -99,6 +101,7 @@
       <AssemblyReference>UiPath.System.Activities</AssemblyReference>
       <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
       <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>GEH MPRT QUEUE CSharp.Core</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
   <Flowchart sap2010:Annotation.AnnotationText="Mivel az Orchestrator kezeli a tranzakciók teljes életciklusát a létrehozástól a befejezésig. A várólistákban tárolt tranzakciók állapota folyamatosan változik, ahogy a rendszer feldolgozza azokat. &#xA;&#xA;Tranzakció állapot beálítása.&#xA;Három lehetséges állapot lehet: Siker, Üzleti kivétel és Rendszer kivétel.&#xA;&#xA;Üzleti kivétel:&#xA;Olyan  helyzetet jellemez, mely nem felel meg a folyamat szabályainak és megakadályozza a tranzakció feldolgozását. Ebben az esetben a tranzakciót nem próbálják meg újra, mivel az eredmény ugyanaz lesz, amíg a kivételt okozó probléma meg nem oldódik. Például, ha egy folyamat azt várja, hogy elolvassa egy e-mail mellékletét, de a feladó nem csatolt fájlt, akkor a tranzakció azonnali újrapróbálkozása nem ad más eredményt.&#xA;&#xA;Rendszer kivétel:&#xA;Olyan kivétel, amelynek oka nem az üzleti logika szabályainak megsértése, hanem a használt alkalmazások, erőforrások okozta hiba. Ha ez a fajta kivétel megtörténik, a folyamatban részt vevő alkalmazások bezárása és újbóli megnyitása után újra meg lehet próbálni a tranzakcióelemet.&#xA;-------------------------------------------------------------------&#xA;Argumentumok(név, adattípus, alapértelmezett érék, ha van):&#xA;in:&#xA;in_ExceptionType&lt;string&gt;&#xA;in_ExceptionMessage&lt;string&gt;&#xA;in_TransationItem&lt;Queueitem&gt;&#xA;&#xA;io:&#xA;io_ConsecutiveSystemExceptions&lt;int32&gt;" DisplayName="Set transaction status" sap:VirtualizedContainerService.HintSize="1244,579.04" sap2010:WorkflowViewState.IdRef="Flowchart_1">
@@ -300,7 +303,9 @@
                         <scg:Dictionary x:TypeArguments="x:String, InArgument" />
                       </ui:SetTransactionStatus.Analytics>
                       <ui:SetTransactionStatus.Details>
-                        <InArgument x:TypeArguments="x:String" />
+                        <InArgument x:TypeArguments="x:String">
+                          <CSharpValue x:TypeArguments="x:String">ErrorCatalog.Remedy(in_ErrorCode)</CSharpValue>
+                        </InArgument>
                       </ui:SetTransactionStatus.Details>
                       <ui:SetTransactionStatus.FolderPath>
                         <InArgument x:TypeArguments="x:String">
@@ -308,14 +313,15 @@
                         </InArgument>
                       </ui:SetTransactionStatus.FolderPath>
                       <ui:SetTransactionStatus.Output>
-                        <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        <scg:Dictionary x:TypeArguments="x:String, InArgument">
+                          <InArgument x:TypeArguments="x:String" x:Key="ErrorCode">
+                            <CSharpValue x:TypeArguments="x:String">in_ErrorCode</CSharpValue>
+                          </InArgument>
+                        </scg:Dictionary>
                       </ui:SetTransactionStatus.Output>
                       <ui:SetTransactionStatus.Reason>
                         <InArgument x:TypeArguments="x:String">
-                          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_12">
-                            <CSharpValue.Result>
-                              <OutArgument x:TypeArguments="x:String" />
-                            </CSharpValue.Result>in_ExceptionMessage</CSharpValue>
+                          <CSharpValue x:TypeArguments="x:String">ErrorCatalog.ToReason(in_ErrorCode, in_ExceptionMessage)</CSharpValue>
                         </InArgument>
                       </ui:SetTransactionStatus.Reason>
                       <ui:SetTransactionStatus.TransactionItem>
@@ -375,7 +381,9 @@
                         <scg:Dictionary x:TypeArguments="x:String, InArgument" />
                       </ui:SetTransactionStatus.Analytics>
                       <ui:SetTransactionStatus.Details>
-                        <InArgument x:TypeArguments="x:String" />
+                        <InArgument x:TypeArguments="x:String">
+                          <CSharpValue x:TypeArguments="x:String">ErrorCatalog.Remedy(in_ErrorCode)</CSharpValue>
+                        </InArgument>
                       </ui:SetTransactionStatus.Details>
                       <ui:SetTransactionStatus.FolderPath>
                         <InArgument x:TypeArguments="x:String">
@@ -383,11 +391,15 @@
                         </InArgument>
                       </ui:SetTransactionStatus.FolderPath>
                       <ui:SetTransactionStatus.Output>
-                        <scg:Dictionary x:TypeArguments="x:String, InArgument" />
+                        <scg:Dictionary x:TypeArguments="x:String, InArgument">
+                          <InArgument x:TypeArguments="x:String" x:Key="ErrorCode">
+                            <CSharpValue x:TypeArguments="x:String">in_ErrorCode</CSharpValue>
+                          </InArgument>
+                        </scg:Dictionary>
                       </ui:SetTransactionStatus.Output>
                       <ui:SetTransactionStatus.Reason>
                         <InArgument x:TypeArguments="x:String">
-                          <CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_16">in_ExceptionMessage</CSharpValue>
+                          <CSharpValue x:TypeArguments="x:String">ErrorCatalog.ToReason(in_ErrorCode, in_ExceptionMessage)</CSharpValue>
                         </InArgument>
                       </ui:SetTransactionStatus.Reason>
                       <ui:SetTransactionStatus.TransactionItem>
