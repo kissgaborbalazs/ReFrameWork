@@ -4,6 +4,8 @@ UiPath RPA projekt sablon, globális kivételkezelővel (GEH) és Orchestrator q
 
 ---
 
+> 📘 **Részletes fejlesztői kézikönyv (junior fejlesztőknek is):** [`docs/README.md`](docs/README.md) – architektúra, első lépések, konfiguráció, hibakezelés, best practice-ek, tesztelés, üzemeltetés, ellenőrző listák.
+
 ## Tartalomjegyzék
 
 - [Áttekintés](#áttekintés)
@@ -67,6 +69,7 @@ ReFrameWork/
 │   └── ErrorHandling/               # Hibakód-katalógus
 │       ├── ErrorCatalog.cs          # Központi katalógus (FW-* alapkódok + projekt kódok)
 │       ├── Err.cs                   # Kivétel-factory: Err.Business / Err.System
+│       ├── ErrorPolicy.cs           # Hibakezelési döntések (pl. IsLastAttempt)
 │       └── LoadErrorCatalog.cs      # Config.xlsx / ErrorCodes lap betöltése (InitAllSettings hívja)
 │
 ├── 2_Application_Layer/             # Alkalmazásréteg workflow-ok (fejlesztendő)
@@ -84,7 +87,9 @@ ReFrameWork/
 │       └── Config_MainException.xlsx    # Tesztkonfiguráció
 │
 ├── Configuration/
-│   └── Config.xlsx                  # Konfiguráció és credential adatok
+│   └── Config.xlsx                  # Konfiguráció, assetek és hibakódok (ErrorCodes lap)
+│
+├── docs/                            # Részletes fejlesztői kézikönyv
 │
 └── Templates/
     ├── MailTemplate.html                   # Sikeres futás e-mail sablon
@@ -151,7 +156,9 @@ A `Configuration/Config.xlsx` fájl két lapot tartalmaz: **Settings** és **Ass
 | `ProcessesToKill` | String | Vesszővel elválasztott folyamatnevek (pl. `chrome.exe,notepad.exe`) |
 | `MaxConsecutiveSystemExceptions` | Int | Egymást követő rendszer kivételek maximuma leállás előtt |
 | `MailSubject` | String | E-mail tárgy sablonszöveg (pl. `{result} - {automationName} - {reference}`) |
-| `Debug` | Boolean | `True`: e-mailek nem kerülnek elküldésre |
+| `Debug` | Boolean | Jelenleg csak logol; az e-mail küldést **nem** tiltja le (lásd `todo.md` M pont) |
+| `QueueMaxRetryNumber` | Int | Egyezzen a queue *Max # Retries* értékével – ebből dől el, hogy egy rendszerhibás tétel az utolsó kísérletnél tart-e |
+| `OrchestratorQueueFolder` / `OrchestratorQueueName` | String | A feldolgozott queue mappája (üres = a job mappája) és neve |
 
 ### GlobalVariables
 
@@ -191,6 +198,7 @@ Az `InitAllSettings.xaml` futtatása után a következő globális szótárak é
 | `in_Limit` | `1` | Max feldolgozandó queue elemek száma (0 = korlátlan) |
 | `in_StopAtLimit` | `True` | Megálljon-e a limit elérésekor |
 | `in_NonWorkingHours` | *(üres)* | Munkaidőn kívüli időszakok (pl. `14:00-15:00,17:00-17:30`) |
+| `in_FallbackAlertEmail` | *(üres)* | Tartalék értesítési cím, ha a Config betöltése hibázik (`FW-CFG-002`). Élesben töltsd ki! |
 
 ---
 
@@ -219,6 +227,7 @@ A kivétel dobásakor csak egy **hibakódot** (és az üzenet paramétereit) adu
 | `FW-SYS-000` | Kód nélküli (nem katalogizált) rendszerkivétel |
 | `FW-SYS-001` | Elérte az egymást követő rendszerkivételek maximumát |
 | `FW-CFG-001` | Hibás `ErrorCodes` lap (hiányzó oszlop, duplikált kód, üres Message) |
+| `FW-CFG-002` | A konfiguráció betöltése sikertelen (tartalék e-mail az `in_FallbackAlertEmail` címre) |
 
 **Adatfolyam:** `Err.Business/System` → a kód az `Exception.Data["ErrorCode"]` kulcson utazik → `MainMachine` Catch: `ErrorCatalog.Resolve(exception)` → `SetTransactionStatus`:
 

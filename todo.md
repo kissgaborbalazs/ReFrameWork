@@ -224,6 +224,9 @@ if (!GlobalVariables.Config.ContainsKey("ProcessesToKill") || GlobalVariables.Co
 
 | # | Hol | Probléma |
 |---|-----|----------|
+| M | `GEH_Process.xaml`, `Process.xaml` | A `Debug` Config kulcs nincs a `SendEmail` `in_Debug` argumentumára kötve (a GEH_Process fixen `False`-t ad át) – a README korábban azt állította, hogy Debug módban nem megy e-mail |
+| N | `MainMachine.xaml` | A `ClearExceptionFiles` Config kulcsot semmi nem használja; a kivétel-mappa takarítása (1 hónapnál régebbi fájlok) mindig lefut |
+| O | `5_Test/Main/*.xaml` | A tesztek Then ága üres (nem ellenőriznek), és a `Processes/Teszt` / `Teszt_queue` értékek beégetettek |
 | K | `SetTransactionStatus.xaml` | Ellenőrizni Orchestratorban, hogy Failed tételnél az `Output` (`ErrorCode`) mező megjelenik-e a queue exportban |
 | L | hibakód-katalógus – következő lépések | Idegen kivételek osztályozása (típus + regex → kód), `Owner` alapú címzett-routing, statikus teszt a használt / katalogizált kódokra, hiba-ujjlenyomat alapú e-mail deduplikáció |
 
